@@ -1,0 +1,12 @@
+.my-view {
+    
+    height:300px;
+    width:300px;
+    line-height:300px;
+    margin:0 auto;
+    text-align:center;
+    background:#000;
+    color:#fff;
+    border:#c1c1c1;
+    position:absolute;
+}

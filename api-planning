@@ -1,0 +1,172 @@
+Resource: page
+
+Resource fields:
+
+    id(integer) - the id of the page
+    alias(string) - the alias is alpha-dash signature of the page
+    created_at(timestamp) - date of the page's creation
+    updated_at(timestamp) - date of last modification
+    title(string) - human readable title
+    keywords(string) - the meta keywords of a page
+    description(string) - the meta description of a page
+    styles(string) - a list of styles that need to be loaded
+    template(string) - the page's body template
+    content(string) - the page's content
+
+Resource routes:
+
+    GET /page
+        description :: retrieves a list of pages
+        data        :: filter - array {key => value, key1 => value1 ...} filters 
+                                the list by every pair in the array
+                       wildcard - boolean if set to true the filter is applied 
+                                  using wildcards
+                       order - array(field, direction) orders the list by the 
+                               required field
+                       limit - array(number, offset) limits the list's size
+        response    :: json(list of pages) 
+
+    GET /page/:id
+        description :: retrieves a page by id
+        data        :: none
+        response    :: json(page)
+
+    GET /page/:alias
+        description :: retrieves a page by alias
+        data        :: none
+        response    :: json(page)
+
+    POST /page
+        description :: creates a new page
+        data        :: array of page's fields with values
+        response    :: json(success : boolean, error : string/null)
+
+    PUT /page/:id
+        description :: updates a page by id
+        data        :: array of page's fields with values
+        response    :: json(success : boolean, error : string/null)
+    
+    PUT /page/:alias
+        description :: updates a page by alias
+        data        :: array of page's fields with values
+        response    :: json(success : boolean, error : string/null)
+
+    DELETE /page/:id
+        description :: deletes a page by id
+        data        :: none
+        response    :: json(success : boolean, error : string/null)
+    
+    DELETE /page/:alias
+        description :: deletes a page by alias
+        data        :: none
+        response    :: json(success : boolean, error : string/null)
+
+================================================================================
+
+Resource: module
+
+Resource fields:
+
+    id(integer) - the id of the module
+    page_id(integer) - id of the page for which the module is being loaded
+    alias(string) - the alias is alpha-dash signature of the module
+    created_at(timestamp) - date of the module's creation
+    updated_at(timestamp) - date of last modification
+    title(string) - human readable title
+    data(array) - this is the data provided by the module
+
+Resource routes:
+    
+    GET /module/:id
+        description :: retrieves a module by id
+        data        :: page_id - id of the page for which the module is being 
+                                 loaded, defaults if null
+        response    :: json(module)
+    
+    GET /module/:alias *
+        description :: retrieves a module by alias
+        data        :: page_id - id of the page for which the module is being
+                                 loaded, defaults if null
+        response    :: json(module)
+
+* From this point down for every :id route there should be assumed an :alias
+route unless stated otherwise
+
+Resource fields (settings)
+    
+    id(integer) - the id of the module
+    page_id(integer) - id of the page for which the module is being loaded
+    alias(string) - the alias is alpha-dash signature of the module
+    created_at(timestamp) - date of the module's creation
+    updated_at(timestamp) - date of last modification
+    title(string) - human readable title
+    data_tables(string) - the list of data tables for this module
+    additional(array) - an array with the additional settings of the module
+
+Resource routes (settings)
+
+    GET /module/:id/settings/
+        description :: retrieves module settings by id
+        data        :: page_id - id of the page for which the settings are being
+                                 loaded, defaults if null
+        response    :: json(the module's settings)
+
+    POST /module/:id/settings
+        description :: creates new settings of the current module for a page
+        data        :: page_id - the page being affected, cannot be null
+                       settings - an array of settings
+        response    :: json(success : boolean, error : string/null)
+    
+    PUT /module/:id/settings
+        description :: updates the settings of the module for a page or the 
+                       defaults if page_id is null
+        data        :: page_id - the page being affected
+                       settings - an array of settings
+        response    :: json(success : boolean, error : string/null)
+
+    DELETE /module/:id/settings
+        description :: deletes the settings of the module for a page, cannot 
+                       delete defaults
+        data        :: page_id - the page being affected, cannot be null
+                       settings - an array of settings
+        response    :: json(success : boolean, error : string/null)
+
+Resource fields (data)
+
+    data(array) - this will be custom data for each model and table
+
+Resource routes (data)
+    
+    GET /module/:id/data/
+        description :: retrieves module data list from a specific data table
+        data        :: table - the id of the data table being queried
+                       filter - array {key => value, key1 => value1 ...} filters 
+                                the list by every pair in the array
+                       wildcard - boolean if set to true the filter is applied 
+                                  using wildcards
+                       order - array(field, direction) orders the list by the 
+                               required field
+                       limit - array(number, offset) limits the list's size
+        response    :: json(the module's data list)
+    
+     GET /module/:id/data/:d_id
+        description :: retrieves module data by d_id  from a specific data table
+        data        :: table - the id of the data table being queried
+        response    :: json(the module's data)
+
+     POST /module/:id/data/
+        description :: creates a new data entry in the selected module's data table
+        data        :: table - the id of the data table being queried
+                       data  - array of data table's fields with values
+        response    :: json(success : boolean, error : string/null)
+
+     PUT /module/:id/data/
+        description :: updates a data entry in the selected module's data table
+        data        :: table - the id of the data table being queried
+                       data  - array of data table's fields with values
+        response    :: json(success : boolean, error : string/null)
+
+     DELETE /module/:id/data/
+        description :: deletes a data entry in the selected module's data table
+        data        :: table - the id of the data table being queried
+        response    :: json(success : boolean, error : string/null)
