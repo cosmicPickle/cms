@@ -19,10 +19,8 @@ class Messages {
     }
     
     public function msg($tag){
-        
-        $select = array("t1.tag, t1.type, IFNULL(t2.text, t1.text) as text");
-        
-        $result = $this->f3->get('dbb')->select($select)
+
+        $result = $this->f3->get('dbb')->select("t2.*, t1.*")
                                        ->from($this->msg_t,'t1')
                                        ->join($this->msg_t."_lang",
                                               "t1.id=t2.id_ AND t2.locale=?",
@@ -35,6 +33,14 @@ class Messages {
             self::$log[] = $result[0];
         else
             $this->msg('E_UKNW');
+    }
+    
+    public function errcount($type = NULL)
+    {
+        return count(!$type ? self::$log 
+                            : array_filter(self::$log, function($msg) use ($type) {
+                                  return $msg['type'] == $type;
+                              }));
     }
     
     public function clear()

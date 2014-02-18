@@ -8,8 +8,29 @@ namespace Helpers;
 
 class Utils {
     
-    public function respond($resp) 
+    public function respond($data, $return = FALSE) 
     {
-        echo json_encode($resp);
+        $resp = json_encode(array(
+            "success" => 1,
+            "data" => $data
+        ));
+        
+        if($return)
+            return $resp;
+        
+        echo $resp;
+    }
+    
+    public function reserrors($errors, $return = FALSE)
+    {
+        $resp = json_encode(array(
+            "success" => 0,
+            "data" => $errors
+        ));
+        
+        if($return)
+            return $resp;
+        
+        echo $resp;
     }
 }

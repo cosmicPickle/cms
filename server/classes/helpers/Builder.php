@@ -53,7 +53,7 @@ class Builder {
         if(!in_array($type, array("LEFT","RIGHT","INNER")))
             $type = "LEFT";
         
-        $this->_join = $type . " JOIN " . $table;
+            $this->_join .= (($this->_join) ? " " : NULL).$type . " JOIN " . $table;
         
         if($as)
             $this->_join .= " AS ". $as;
@@ -73,7 +73,9 @@ class Builder {
         }
         else
         {
-            $this->_where = "WHERE " . $this->_parse_where($where);
+            $this->_where = $this->_parse_where($where);
+            if($this->_where)
+                $this->_where = "WHERE ".$this->_where;
         }
         
         return $this;
@@ -81,6 +83,10 @@ class Builder {
     
     public function order($by, $dir = "ASC")
     {
+        //Let's see if $by is a name of a field or an SQL injection
+        if(!preg_match('#^([a-zA-Z0-9_\.]*)$#', $by))
+            return $this;
+        
         if(!in_array($dir, array("ASC", "DESC")))
             $type = "ASC";
         
@@ -94,14 +100,10 @@ class Builder {
     {
         $this->_limit = "LIMIT ";
         
-        if($offset)
-        {    
-            $this->_limit .= "? , ";
-            $this->_add_args($offset, __FUNCTION__);
-        }
+        if($offset && is_numeric($offset) && $offset > 0)   
+            $this->_limit .= $offset.", ";
         
-        $this->_limit .= "?";
-        $this->_add_args($limit, __FUNCTION__);
+        $this->_limit .= is_numeric($limit) && $limit > 0 ? $limit : 1;
         
         return $this;
     }
@@ -172,6 +174,11 @@ class Builder {
             }
             else
             {
+                //The values are automatically sanitized, but let's check the 
+                //key. The regex matches: table.val OR (!)table.val(<|>|!|%)
+                if(!preg_match('#^(([a-zA-Z0-9_\.]*)|((![a-zA-Z0-9_\.]*|[a-zA-Z0-9_\.]*)(>|<|!|%)))$#', $key))
+                    continue;
+                    
                 $conds[$index] = '';
 
                 if(preg_match('#^!.*#', $key))
@@ -187,13 +194,19 @@ class Builder {
                     if($index > 0)
                         //Otherwise - AND
                         $conds[$index] .= "AND ";   
-  
+                 
+                
                 //Next we check for an expression
-                if(preg_match('#^(!\w*|\w*)(>|<|!=|%)$#',$key,$matches))
+                if(preg_match('#^(![a-zA-Z0-9_\.]*|[a-zA-Z0-9_\.]*)(>|<|!|%)$#',$key,$matches))
                 {      
                      $key = str_replace($matches[2], '', $key);
-                     if($matches[2] == "%")
-                         $conds[$index] .= $key. " LIKE %?%";
+                     if($matches[2] == "%") 
+                     {
+                         $conds[$index] .= $key. " LIKE ?";
+                         $val = "%".$val."%";
+                     }
+                     elseif($matches[2] == "!")
+                         $conds[$index] .= $key. " != ?";
                      else
                          $conds[$index] .= $key . " ".$matches[2]." ?";
                 }    

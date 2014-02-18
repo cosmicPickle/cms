@@ -19,8 +19,6 @@ Resource routes:
         description :: retrieves a list of pages
         data        :: filter - array {key => value, key1 => value1 ...} filters 
                                 the list by every pair in the array
-                       wildcard - boolean if set to true the filter is applied 
-                                  using wildcards
                        order - array(field, direction) orders the list by the 
                                required field
                        limit - array(number, offset) limits the list's size
@@ -142,8 +140,6 @@ Resource routes (data)
         data        :: table - the id of the data table being queried
                        filter - array {key => value, key1 => value1 ...} filters 
                                 the list by every pair in the array
-                       wildcard - boolean if set to true the filter is applied 
-                                  using wildcards
                        order - array(field, direction) orders the list by the 
                                required field
                        limit - array(number, offset) limits the list's size
