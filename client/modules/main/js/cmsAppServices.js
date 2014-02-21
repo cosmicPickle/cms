@@ -12,8 +12,7 @@
                     url : apiUrl + page, 
                     method : "GET",
                     params : {
-                        load_modules : 1,
-                        //parse :1
+                        load_modules : 1
                     }
                 });
             }
