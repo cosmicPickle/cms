@@ -13,7 +13,7 @@
                     method : "GET",
                     params : {
                         load_modules : 1,
-                        parse :1
+                        //parse :1
                     }
                 });
             }

@@ -12,14 +12,8 @@ class Page {
         else
         {    
             $result = $this->_get_single($f3);
-            
             if($result && $f3->get("GET.load_modules"))
-            {
                 $this->_load_modules($f3, $result);
-                
-                if($f3->get("GET.parse"))
-                    $this->_parse_page ($result);
-            } 
         }
         
         if($f3->get('messages')->errcount())
@@ -81,31 +75,5 @@ class Page {
                                ->from('modules')
                                ->where(array( 'id-in' => json_decode($page[0]['modules'])))
                                ->run()->result();
-    }
-    
-    private function _parse_page(&$page)
-    {
-        foreach($page[0]['modules'] as $mod)
-        {
-            $replace = '<div ng-include="\'modules/%s/views/%s.html\'" %s></div>';
-            $pattern = "#\{\{".$mod['alias']."(:([a-zA-Z0-9\-\._]+)){0,1}(\(([a-zA-Z0-9_;=]+)\)){0,1}\}\}#";
-            
-            $page[0]['content'] = preg_replace_callback($pattern, 
-                function($matches) use ($replace, $mod){
-                    
-                    $onload = NULL;
-                    if(isset($matches[4]) && $matches[4])
-                    {
-                        $attrs = explode(';', $matches[4]);
-                        foreach($attrs as &$attr)
-                            $attr = $mod['bundle'].".".$mod['alias'].".".$attr;
-                                
-                        $onload = 'onload="'.implode(';',$attrs).'"'; 
-                    }
-                    
-                    return sprintf($replace, $mod['bundle'], $mod['alias'].ucfirst($matches[2]), $onload);
-
-                }, $page[0]['content']);
-        }
     }
 }
