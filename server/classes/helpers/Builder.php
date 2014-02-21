@@ -130,6 +130,51 @@ class Builder {
         return $this->_result;
     }
     
+    public function default_select($table, $locale)
+    {
+        return $this->select("t2.*, t1.*")
+                    ->from($table, 't1')
+                    ->join($table . '_lang',
+                           "t1.id = t2.id_ AND t2.locale = ?",
+                           "t2",
+                           $locale);
+    }
+    
+    public function default_filters($data)
+    {
+        if(isset($data['filter']))
+         {
+             foreach($data['filter'] as $key => $value)
+             {
+                 $new_key = preg_replace('#id($|>|<|!|%)#','id_$1', $key);
+                 unset($data['filter'][$key]);
+                 
+                 $data['filter'][$new_key] = $value;
+             }
+             if(isset($data['filter']['id']))
+             {    
+                 $data['filter']['id_'] = $data['filter']['id'];
+                 unset($data['filter']['id']);
+             }
+             $this->where($data['filter']);
+         }
+         
+         
+         if(isset($data['order'][0]))
+         {
+             $dir = isset($data['order'][1]) ? $data['order'][1] : 'ASC';
+             $this->order($data['order'][0],$dir);
+         }
+         
+         if(isset($data['limit'][0]))
+         {
+             $offset = isset($data['limit'][1]) ? $data['limit'][1] : 0;
+             $this->limit($data['limit'][0], $offset);
+         }
+         
+         return $this->run()->result();
+    }
+    
     private function _add_args($args, $func)
     {
         if(!is_array($args))
@@ -160,8 +205,14 @@ class Builder {
             //If this is an array we have to process it recursively
             if(is_array($val))
             {
-                //Recursion
-                $conds[$index] = "(" . $this->_parse_where ($val) . ')';
+                //We evaluate to see if it is an "IN" request
+                if(preg_match('#^([a-zA-Z0-9_\.]*)-in$#', $key, $matches))
+                {
+                    $conds[$index] = $matches[1] . ' IN (' . implode(',', $val) . ')';
+                }
+                else
+                    //Recursion
+                    $conds[$index] = "(" . $this->_parse_where ($val) . ')';
                 
                 //Are there previous conditions ?
                 if($index > 0)

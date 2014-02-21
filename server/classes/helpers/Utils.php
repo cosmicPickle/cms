@@ -13,7 +13,7 @@ class Utils {
         $resp = json_encode(array(
             "success" => 1,
             "data" => $data
-        ));
+        ), JSON_PRETTY_PRINT);
         
         if($return)
             return $resp;
@@ -26,7 +26,7 @@ class Utils {
         $resp = json_encode(array(
             "success" => 0,
             "data" => $errors
-        ));
+        ), JSON_PRETTY_PRINT);
         
         if($return)
             return $resp;

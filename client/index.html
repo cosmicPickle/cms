@@ -1,21 +1,23 @@
     <!doctype html>
-    <html lang="en" ng-app="app">
+    <html lang="en" ng-app="cmsApp" ng-controller="cmsCtrl">
+        
         <head>
             <meta charset="utf-8">
-            <title>My HTML File</title>
+            <title>{{page.title}}</title>
             
             <link rel="stylesheet" type="text/css" href="css/app.css">
             
             <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-            <script src="js/angular.js"></script>
-            <script src="js/angular-animate.min.js"></script>
-            <script src="js/angular-route.min.js"></script>
-            <script src="js/app.js"></script>
+            <script src="lib/angular/angular.js"></script>
+            <script src="lib/angular/angular-animate.min.js"></script>
+            <script src="lib/angular/angular-route.min.js"></script>
+            <script src="modules/main/js/cmsApp.js"></script>
+            <script src="modules/main/js/cmsAppControllers.js"></script>
+            <script src="modules/main/js/cmsAppServices.js"></script>
+            <script src="modules/main/js/cmsAppDirectives.js"></script>
         </head>
-        <body ng-controller="AppController">
-            
-            <div ng-view class="my-view">
+        <body>
+            <div ng-view>
             </div>
-            
         </body>
     </html>

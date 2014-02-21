@@ -24,4 +24,8 @@ $f3->set('db', new DB\SQL(
 //Creating the builder
 $f3->set('dbb', new Helpers\Builder($f3->get('db')));
 
+
+//Setting the content type to application/json for prety printing
+header('Content-Type: application/json');
+
 $f3->run();
