@@ -26,6 +26,7 @@ The server API is based on the RESTful architectural model and provides access t
 
 1. In most occasions when you are sending a request to a node that is expected to return a list you would like to filter, limit and order the response. Here that happens through GET parameters. When I talk about **default filtering**, this is what I mean.
   1. `filter` array - This is a multidimensional array, with each key matching a field or a condition in the table and each. Below is a list of what the filter array can express.
+
     - `key => val`        equals to `(AND) key = val` 
     - `key>|<|! => val`   equals to `(AND) key >|<|!= val`
     - `key% => val`       equals tp `(AND) key LIKE %val%` 
@@ -47,7 +48,7 @@ The server API is based on the RESTful architectural model and provides access t
     ```
     **equals to:**
      
-    ```mysql 
+    ```mysql
        WHERE key1 > val1 OR key2 LIKE val2 OR (key3 != val3 AND key4 = val4)
     ```
   2. `order` array - This is an array of the kind `(order_column, order_by)` 
@@ -67,3 +68,35 @@ The server API is based on the RESTful architectural model and provides access t
   2. Otherwise, the default get function is used. If the default is used and `:d_id` is not set a list is retrieved using **default filtering**. Otherwise, **id resolution** is applied.
 
 
+Module creation (by example)
+----------------------------
+
+Explaining how to create a module for this system will be best done by example. Our goal will be to create a frame for a news module. By a frame I mean, that I will not go into details on how to create the actual news module but rather integrate it into my cms.
+
+
+### Creating a basic `HTML/JavaScript` module
+
+The first thing we need to do is add a line in our modules table with the module's settings. This line will contain the name of the bundle and the alias of the module. We also need to add a line to the modules' language table with a name and description.
+
+```mysql
+INSERT INTO `modules` (`bundle`,`alias`) VALUES ('blog','news');
+INSERT INTO `modules_lang` (`id_`,`locale`,`title`,`description`) VALUES (`news module insert_id`,`en`,`News module`, `This module will be used to display news.`)
+```
+
+Note that the `id_` should map to the insert id of the module.
+
+Next we want to create a folder named `blog`(the name of the bundle) in `client\modules\` with the following structure.
+
+    1.client
+      - modules
+        - blog (the name of the bundle)
+          - js
+          - views
+            newsMain.html (alias_of_module + name_of_view + '.html')
+
+That's it! You have your basic `HTML\JavaScript` module set up. Now in order to include your module to a page, you have to do two things. First you need to insert the module's id in the page's `modules` column. The field should be a json array. Second, you need to add the markup `{{news:main}}` to your page's content. (This process will be automated once the administration is added.)
+
+A little bit on module markup. `{{alias_of_module:view}}` resolves the following way:
+
+1. When AngularJS requests a page, it receives a response with the page + bundles and aliases of the modules included in this page.
+2. AngularJS then creates an `ngInclude` directive which looks in `client\modules\bundle_of_module\views\(alias_of_module + view + '.html')`
