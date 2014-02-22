@@ -52,7 +52,18 @@ The server API is based on the RESTful architectural model and provides access t
     ```
   2. `order` array - This is an array of the kind `(order_column, order_by)` 
   3. `limit` array - This is an array of the kind `(limit, offset)`
+2. In most examples below, unless stated otherwise if `:id` of a node contains alphadash characters it is considered an alias. It is considered an id otherwise. This is reffered to as **id resolution** from here down.
 
 ### /page
 
-`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`. If `id` is not set this node will return a list of pages with **default filtering**. If `id` is set and is a number, the node will return th page with that id. Otherwis, if `id` is alphanumeric the node will return a page with an alias matching `id`.
+1.`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`. If `id` is not set this node will return a list of pages with **default filtering**. **Id resolution** also applies.
+
+### /module
+
+1.`GET /module/:id` - This node retrieves the settings of a module or a list of modules if `id` is not set. **Id resolution** applies.
+
+2. `GET /module/:id/:table/:d_id` - This node retrieves data from tables assosciated with the current module. `:table` reffers to the name of the table. The response depends on a couple of things.
+  1. If there is a module class defined in the appropriate namespace (more on that later) and a `function get()` exists in it, the controll is passed to said function. 
+  2. Otherwise, the default get function is used. If the default is used and `:d_id` is not set a list is retrieved using **default filtering**. Otherwise, **id resolution** is applied.
+
+
