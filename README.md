@@ -51,8 +51,8 @@ The server API is based on the RESTful architectural model and provides access t
        WHERE key1 > val1 OR key2 LIKE val2 OR (key3 != val3 AND key4 = val4)
     ```
   2. `order` array - This is an array of the kind `(order_column, order_by)` 
-
+  3. `limit` array - This is an array of the kind `(limit, offset)`
 
 ### /page
 
-`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`
+`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`. If `id` is not set this node will return a list of pages with **default filtering**. If `id` is set and is a number, the node will return th page with that id. Otherwis, if `id` is alphanumeric the node will return a page with an alias matching `id`.
