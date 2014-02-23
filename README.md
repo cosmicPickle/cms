@@ -1,6 +1,8 @@
 CMS
 ===
 
+*This project is a work in progress. It is far from finished. This document will contain only already implemented functionality and will grow in time.*
+
 This is a Content Management System that consist of a server API build on [PHP Fat Free Framework](http://fatfreeframework.com) and a frontend application build with [AngularJS](http://angularjs.org). This means, ofcourse that you would probably like to get acquainted with those two first if you haven't already.
 
 Application workflow
