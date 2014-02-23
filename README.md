@@ -147,4 +147,25 @@ After creating the table you need to add it in the `data_tables` column of the m
 ```
 
 Again, easy as that we are done. The API implementation of the **CMS** will automatically allow you to access your data tables through the default API routes. If you would like to get news with `id = 1` you could do the following API call :
-`GET /module/news/news/1`. In case you didn't read through the node documentation above, this is resolved by getting entry with `id = 1` from the `news` table of the `news` module. 
+`GET /module/news/news/1`. In case you didn't read through the node documentation above, this is resolved by getting entry with `id = 1` from the `news` table of the `news` module. Now that you have an API for your news module you can easily access it with AJAX calls from the `newsMain.html` file you created the previous step.
+
+### Changing the API behaviour
+
+If you would like to fetch the data differently than the default fetcher, you can do that easily. You need to create a file named `news.php` in the `server/classes/api/blog/` folder. In it you need to define the following class:
+
+```php
+  namespace \Api\Blog\
+  
+  class News {
+      
+      public function get(){
+          //Do your magic data fetching here
+          
+          return $result;
+      }
+  }
+```
+
+And again you are done. Now the API will always call your function when trying to resolve routes for the news module.
+Don't forget that you have to add support for all different routes yourself 
+`GET /module/news/:table`, `GET /module/news/:table/:d_id`. You will be able to override any route in the future just by adding a function with the appropriate name (post, put, delete).
