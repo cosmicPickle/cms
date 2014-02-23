@@ -169,3 +169,49 @@ If you would like to fetch the data differently than the default fetcher, you ca
 And again you are done. Now the API will always call your function when trying to resolve routes for the news module.
 Don't forget that you have to add support for all different routes yourself 
 `GET /module/news/:table`, `GET /module/news/:table/:d_id`. You will be able to override any route in the future just by adding a function with the appropriate name (post, put, delete).
+
+
+### Bootstraping the module in AngularJS
+
+Note that you will need a bit of knowledge in how AngularJS works if you are to understand this part of the tutorial.
+So let's get started. We are back to the `newsMain.html` file. We need to add AngularJS markup (don't worry about adding `ngApp` directive, the module will be injected in the main application automatically).
+
+```html
+    <div ng-controller="blog.newsCtrl">
+    </div>
+    
+    <script src="modules/blog/js/blogControllers.js"></script>
+    <script src="modules/blog/js/blogServices.js"></script>
+    <script src="modules/blog/js/blogDirectives.js"></script>
+```
+
+You, ofcourse need to create the files `blogControllers.js`, `blogServices.js"` and `blogDirectives.js`. 
+
+The cms main module is called `cmsApp`. If you look at the main js file of the application `cmsApp.js`, you will see that all providers are made available for later use in the configuration of the module by assigning them to the cmsApp object. This makes it very easy to insert Controllers, Services and Directives to the main module. I will give examples of each bellow.
+
+```JavaScript
+
+  //blogControllers.js content
+  angular.module('cmsApp').controllerProvider.register('blog.newsCtrl',['$scope', function($scope) {
+      
+  }]);
+  
+  //blogServices.js content
+  angular.module('cmsApp').provide.service('blog.httpService', ['$http', function($http){
+      return {
+          getNews : function(id, params) {
+              
+          }
+      }
+  }]);
+  
+  //blogDirectives.js content
+  angular.module('cmsApp').compileProvider.directive('blog.newsDirective',function(){
+        return {
+            restrict : 'E',
+            templateUrl : 'modules/blog/views/newsDirective.html'
+        };
+    });
+```
+
+You will notice that in all examples above the controller, service and directive are namespaced to the `blog` namespace. That is not mandatory but it is highly recommended to avoid code collisions. The module is now an active AngularJs module and you can use all Angular goodies in it as you see fit.
