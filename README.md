@@ -100,3 +100,51 @@ A little bit on module markup. `{{alias_of_module:view}}` resolves the following
 
 1. When AngularJS requests a page, it receives a response with the page + bundles and aliases of the modules included in this page.
 2. AngularJS then creates an `ngInclude` directive which looks in `client\modules\bundle_of_module\views\(alias_of_module + view + '.html')`
+
+
+### Adding data tables
+
+If you want your module to support a table you have to first create two tables the data table in question and a language table. So let's get started. For the news module we will need one table named `news` and a language table named `news_lang`.
+
+```mysql
+
+CREATE TABLE IF NOT EXISTS `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `alias` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `views` int(20) NOT NULL,
+  `likes` int(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+--
+-- Creating the language table
+--
+
+CREATE TABLE IF NOT EXISTS `news_lang` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_` int(11) NOT NULL,
+  `locale` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `body` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `id_` (`id_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+--
+-- Adding foreign key constraints
+--
+
+ALTER TABLE `news_lang`
+  ADD CONSTRAINT `news_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `news` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+```
+
+After creating the table you need to add it in the `data_tables` column of the modules' table for the news module.
+
+```mysql
+  UPDATE `modules` SET data_tables = '["news"]' WHERE alias = 'news' AND bundle = 'blog'
+```
+
+Again, easy as that we are done. The API implementation of the **CMS** will automatically allow you to access your data tables through the default API routes. If you would like to get news with `id = 1` you could do the following API call :
+`GET /module/news/news/1`. In case you didn't read through the node documentation above, this is resolved by getting entry with `id = 1` from the `news` table of the `news` module. 
