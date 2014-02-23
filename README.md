@@ -215,3 +215,19 @@ The cms main module is called `cmsApp`. If you look at the main js file of the a
 ```
 
 You will notice that in all examples above the controller, service and directive are namespaced to the `blog` namespace. That is not mandatory but it is highly recommended to avoid code collisions. The module is now an active AngularJs module and you can use all Angular goodies in it as you see fit.
+
+**Module parameters**
+
+In the beginning of this document I showed a module call like this `{{alias_of_module:view(param1=val1,param2...)}}`. This call will make param1, param1 etc. visible in your module's view, which in turn will allow you to display the module differently from page to page. The best thing about it is that you don't have to do anything in addition to what you have already done. Let's look at a specific example: `{{news:main(page=1)}}`.
+
+The `page` parameter will be available in your `newsMain.html` file by `bundle_name.alias.page` like this:
+
+```html
+    <div ng-controller="blog.newsCtrl">
+      {{blog.news.page}}
+    </div>
+    
+    <script src="modules/blog/js/blogControllers.js"></script>
+    <script src="modules/blog/js/blogServices.js"></script>
+    <script src="modules/blog/js/blogDirectives.js"></script>
+```
