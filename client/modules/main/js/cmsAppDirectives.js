@@ -27,7 +27,7 @@
                     $.each(page.modules,function(i,mod){
                        
                        //Fucked up regular expression, I know. Matches {{module:view[(params)]}}.
-                       var pattern = '\\{\\{' + mod.alias + '(:([a-zA-Z0-9\\-\\._]+)){0,1}(\\(([a-zA-Z0-9_,=]+)\\)){0,1}\\}\\}';
+                       var pattern = '\\{\\{' + mod.alias + '(:([a-zA-Z0-9\\-\\._]+))(\\(([a-zA-Z0-9_,=]+)\\)){0,1}\\}\\}';
                        var re = new RegExp(pattern, 'g');
                        
                        //Let's get the matches
