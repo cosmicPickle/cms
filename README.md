@@ -59,7 +59,7 @@ The server API is based on the RESTful architectural model and provides access t
 
 ### /page
 
-1.`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`. If `id` is not set this node will return a list of pages with **default filtering**. **Id resolution** also applies.
+1.`GET /page/:id` - This is the node for retrieving pages. The route performs differently based on the value of `id`. If `id` is not set this node will return a list of pages with **default filtering**. **Id resolution** also applies. You can also specify a GET parameter `load_modules=1` which will include information for the modules on the current page instead of just their ids.
 
 ### /module
 
@@ -67,7 +67,8 @@ The server API is based on the RESTful architectural model and provides access t
 
 2. `GET /module/:id/:table/:d_id` - This node retrieves data from tables assosciated with the current module. `:table` reffers to the name of the table. The response depends on a couple of things.
   1. If there is a module class defined in the appropriate namespace (more on that later) and a `function get()` exists in it, the controll is passed to said function. 
-  2. Otherwise, the default get function is used. If the default is used and `:d_id` is not set a list is retrieved using **default filtering**. Otherwise, **id resolution** is applied.
+  2. Otherwise, the default get function is used. If the default is used and `:d_id` is not set a list is retrieved using **default filtering**. Otherwise, **id resolution** is applied. 
+  3. You can have table relations for each module (see below). In order to fetch table relations along with the table, you can add either or both of the following GET parameters `rel_one=1` and `rel_many=1`.
 
 
 Module creation (by example)
@@ -172,6 +173,25 @@ And again you are done. Now the API will always call your function when trying t
 Don't forget that you have to add support for all different routes yourself 
 `GET /module/news/:table`, `GET /module/news/:table/:d_id`. You will be able to override any route in the future just by adding a function with the appropriate name (post, put, delete).
 
+**Table relations**
+
+You can add a table relations array to your module's (Note: It will only automatically fetch relations if there is no override function for the get method and the apropriate GET params are set). In order to add table relations, you need to add a public array called $fk_relations in your module's class formated in the following way:
+
+```php
+  var $fk_relations = array(
+      'table_name_1' => array(
+          'foreign_key_column_1' => 'foreign_table_1'
+          'foreign_key_column_2' => 'foreign_table_2'
+          ...
+      )
+      'table_name_2' => array(
+          ...
+      )
+      ...
+  )
+```
+
+The `foreign_key_column_1` is the name of the column of `table_name_1` that will be matched to the `id` field of `foreign_table_1`. 
 
 ### Bootstraping the module in AngularJS
 
