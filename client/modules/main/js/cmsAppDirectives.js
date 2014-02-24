@@ -12,7 +12,7 @@
         };
     });
     
-    cmsAppDirectives.directive('cmsPage',['$compile', function($compile){
+    cmsAppDirectives.directive('cmsPage',['$compile', '$location', function($compile, $location){
         
         var link = function(scope, elem, attrs) {
         
@@ -42,17 +42,22 @@
                        //The actual replacement
                        page.content = page.content.replace(re, replacement);  
                        
+                       //We need to have our module's settings available through the app
+                       //Initializing scope variables;
+                        if(!scope[mod.bundle])
+                             scope[mod.bundle] = {};
+                        if(!scope[mod.bundle][mod.alias])
+                             scope[mod.bundle][mod.alias] = {};
+                         
+                        //Storing the settings
+                        scope[mod.bundle][mod.alias]['__settings'] = mod;
+                            
                        //One last thing. We need to add the params to the scope, namespaced to bundle.alias.para,
                        //so that they can be used in modules
                        if(matches[4])
                        {
                            var params = matches[4].split(',');
                            
-                           //Initializing scope variables;
-                           if(!scope[mod.bundle])
-                                scope[mod.bundle] = {};
-                           if(!scope[mod.bundle][mod.alias])
-                                scope[mod.bundle][mod.alias] = {};
                            
                            //Looping through the params
                            $.each(params, function(i, p){
@@ -60,6 +65,12 @@
                                p = p.split('=');
                                if(p[0] && p[1])
                                    scope[mod.bundle][mod.alias][p[0]] = p[1];
+                               
+                               var path = [mod.bundle,mod.alias,p[0]];
+                               var getOverwrite = $location.search()[path.join('.')];
+                               
+                               if(getOverwrite)
+                                   scope[mod.bundle][mod.alias][p[0]] = getOverwrite;
                            });
                        }
                     });

@@ -125,7 +125,7 @@ class Page {
      */
     private function _load_modules($f3, &$page)
     {
-        $page[0]['modules'] = $f3->get('dbb')->select('bundle,alias')
+        $page[0]['modules'] = $f3->get('dbb')->select('id,bundle,alias')
                                ->from('modules')
                                ->where(array( 'id-in' => json_decode($page[0]['modules'])))
                                ->run()->result();
