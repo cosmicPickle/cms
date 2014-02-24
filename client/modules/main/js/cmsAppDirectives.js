@@ -33,6 +33,10 @@
                        //Let's get the matches
                        var matches = re.exec(page.content);
                        
+                       //If we don't have matches continue
+                       if(!matches)
+                            return true;
+                       
                        //This constructs the ngInclude directive to add our module to the scope
                        var replacement = '<div ng-include="\'modules/'
                                          + mod.bundle + '/views/' + mod.alias 

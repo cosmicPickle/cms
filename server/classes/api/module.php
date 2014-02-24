@@ -26,6 +26,13 @@ class Module {
     private $mod_ns = "\\Api\\Modules\\";
     
     /**
+     * If a module class exists in the appropriate namespace, it will be 
+     * instanced here
+     * 
+     * @var type 
+     */
+    private $mod_ch;
+    /**
      * get function 
      * 
      * This function is an entry point for get requests at the module node. 
@@ -61,15 +68,18 @@ class Module {
                     //This will be the class name (including namespace) of the module in question
                     $class = $this->mod_ns .  ucfirst($result['settings'][0]['bundle']) . '\\' 
                              . ucfirst($result['settings'][0]['alias']);
-                    
-                    if(class_exists($class) && method_exists($class, 'get'))
+                    if(class_exists($class))
                     {
-                        //If the class exists and it has a method named get, it will be 
+                        //If the class exists we will create an instance of it 
+                        //for later use
+                        $this->mod_ch = new $class();
+                        
+                        //If a method named get exists in the child, it will be 
                         //used to fetch table data
-                        $child = new $class();
-                        $result['mdata'] = $child->get($f3);
+                        if(method_exists($class, 'get'))
+                            $result['mdata'] = $this->mod_ch->get($f3);
                     }
-                    else
+                    if(!class_exists($class) || !method_exists($class, 'get'))
                         //Otherwile we fallback to default
                         $result['mdata'] = $this->_get_data($f3);
                }
@@ -107,10 +117,23 @@ class Module {
         
          if(is_numeric($mod_id))
             //The first parameter is an id
-            $sql->where(array('t1.id' => $mod_id));
+            $sql->where(array($this->mod_t.'.id' => $mod_id));
         else
-            //We have been given an alias
-            $sql->where(array('t1.alias' => $mod_id));
+        {
+             //Here we use the alias.bundle syntax, because there might be modules
+             //in different bundles with the same alias
+             $mod = explode('.', $mod_id);
+             if(!isset($mod[1]))
+             {
+                 $sql->clear();
+                 $f3->get('messages')->msg('M_FOUND');
+                 
+                 return NULL;
+             }
+             
+             $sql->where(array($this->mod_t.'.bundle' => 0, $this->mod_t.'.alias' => $mod[1]));
+        }
+           
         
         $result = $sql->run()->result(); 
         
@@ -152,6 +175,12 @@ class Module {
     {
         $result = $f3->get('dbb')->default_select($f3->get('PARAMS.table'), $f3->get('locale'))
                                  ->default_filters($f3->get('GET'));
+
+        if(!$result)
+            $f3->get('messages')->msg('D_NONE');
+        
+        if($this->mod_ch && isset($this->mod_ch->fk_relations))
+            return $this->_load_relations($f3, $result);
         
         return $result;
     }
@@ -159,7 +188,7 @@ class Module {
     /**
      * _get_data_single
      * 
-     * Returns a sihngle data entry by using \Helper\Builder::default_select() 
+     * Returns a single data entry by using \Helper\Builder::default_select() 
      * 
      * @see \Helper\Builder::default_select()
      * @param object f3 instance
@@ -168,10 +197,105 @@ class Module {
     private function _get_data_single($f3)
     {
         $id = $f3->get('PARAMS.d_id');
-        return $f3->get('dbb')->default_select($f3->get('PARAMS.table'), $f3->get('locale'))
-                              ->where(array('t1.id' => $id))->run()->result();
+        $data_table = $f3->get('PARAMS.table');
+        
+        //Getting the requested entry
+        $result = $f3->get('dbb')->default_select($data_table, $f3->get('locale'))
+                                 ->where(array($data_table.'.id' => $id))->run()->result();
+        
+        if(!$result)
+        {
+            //If the result is empty no entry was found. Fire an error.
+            $f3->get('messages')->msg('D_FOUND');
+            return NULL;
+        }
+        
+        //If an active child object exists and has a relationship array set
+        //We need to fetch related data
+        if($this->mod_ch && isset($this->mod_ch->fk_relations))
+            return $this->_load_relations($f3, $result);
+        
+        return $result;
     }
     
-    
+    private function _load_relations($f3, $result)
+    {
+        $data_table = $f3->get('PARAMS.table');
+        
+        //$table is the current table $rel is an array with the relations on
+        //this table
+        foreach($this->mod_ch->fk_relations as $table => $rel)
+        {
+            //rel_one = true means we need to get 'one on one' relations
+            if($f3->get('GET.rel_one') && $table == $data_table)
+                //column shows which field is the foreign key and rel_tb
+                //is the foreign table
+                foreach($rel as $column => $rel_tb)
+                {
+                    //We fetch the data from the foreign table
+                    $rel_data = $f3->get('dbb')->default_select($rel_tb, $f3->get('locale'));
+                    
+                    //Do we have one or many items in the result?
+                    if(count($result) == 1)
+                        $rel_data->where(array($rel_tb.".id" => $result[0][$column]));
+                    else
+                    {
+                        $rel_data->where(array($rel_tb.".id-in" => array_map(function($v) use ($column){
+                            return $v[$column]; 
+                        },$result)));
+                    }
+                    
+                    $rel_data = $rel_data->run()->result();
+                     
+                   //Set it in the appropriate field of the result
+                   foreach($result as $key => &$val)
+                   {
+                       $filter = array_filter($rel_data, function($v) use ($val, $column){
+                            return $v['id_'] == $val[$column];
+                       });
+                       
+                       $val[$column] = $filter[0];
+                   }
+                }
+            //rel_many = true means we have to get 'one to many' relations 
+            if($table != $data_table && $f3->get('GET.rel_many'))
+            {
+                //we need to see if the current $rel contains mention of our 
+                //data table
+                $rel_column = array_search($data_table, $rel);
+
+                //If rel_column is NULL no match was found
+                if($rel_column)
+                {
+                    //Fetching data
+                    $rel_data = $f3->get('dbb')->default_select($table, $f3->get('locale'));
+                                   
+                    //Do we have one or many items in the result?
+                    if(count($result) == 1)
+                        $rel_data->where(array($table.".".$rel_column => $result[0]['id_']));
+                    else
+                    {
+                        $rel_data->where(array($table.".".$rel_column."-in" => array_map(function($v) {
+                            return $v['id_']; 
+                        },$result)));
+                    }
+                    
+                    $rel_data = $rel_data->run()->result();
+                    
+                    //Setting the $table field of the result to rel data
+                    foreach($result as $key => &$val)
+                   {
+                       $filter = array_filter($rel_data, function($v) use ($val, $rel_column){
+                            return $v[$rel_column] == $val['id_'];
+                       });
+                       
+                       $val[$table] = $filter;
+                   }
+                }
+            }
+        }
+
+        return $result;
+    }
 }
 

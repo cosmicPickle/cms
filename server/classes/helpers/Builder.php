@@ -281,7 +281,7 @@ class Builder {
         $this->_result = $this->_db->exec($this->_last_query, $this->_args_parsed);
         
         //We clear all query parts and arguments for the next query
-        $this->_clear();
+        $this->clear();
         
         return $this;
     }
@@ -309,11 +309,11 @@ class Builder {
     public function default_select($table, $locale)
     {
         
-        return $this->select("t2.*, t1.*")
-                    ->from($table, 't1')
+        return $this->select($table."_lang.*, ".$table.".*")
+                    ->from($table)
                     ->join($table . '_lang',
-                           "t1.id = t2.id_ AND t2.locale = ?",
-                           "t2",
+                           $table.".id = " . $table . "_lang.id_ AND " . $table . "_lang.locale = ?",
+                           NULL,
                            $locale);
     }
     
@@ -330,20 +330,30 @@ class Builder {
         //The filter subarray of the data array will contain where filters
         if(isset($data['filter']))
          {
-             //If we are trying to search by id, we are going to get error
-             //about ambiguous field, because it exists in both the table
-             //and language table, thus renaming it to id_
-             //This helps retain user friendly input (We don't want to make
-             //the user sort by t1.id)
-             foreach($data['filter'] as $key => $value)
-             {
-                 $new_key = preg_replace('#id($|>|<|!|%)#','id_$1', $key);
-                 unset($data['filter'][$key]);
-                 
-                 $data['filter'][$new_key] = $value;
-             }
+             //AngularJS calls encode each multidimesional array as json before 
+             //sending it, so we need to check if filter is a string
              
-             $this->where($data['filter']);
+             if(!is_array($data['filter']))
+                 $data['filter'] = json_decode(urldecode ($data['filter']), TRUE);
+             
+             //If we get an empty result, there is some sort of faulty request
+             if($data['filter'])
+             {
+                //If we are trying to search by id, we are going to get error
+                //about ambiguous field, because it exists in both the table
+                //and language table, thus renaming it to id_
+                //This helps retain user friendly input (We don't want to make
+                //the user sort by t1.id)
+                foreach($data['filter'] as $key => $value)
+                {
+                    $new_key = preg_replace('#^!{0,1}id($|>|<|!|%)#','id_$1', $key);
+                    unset($data['filter'][$key]);
+
+                    $data['filter'][$new_key] = $value;
+                }
+
+                $this->where($data['filter']);
+             }
          }
          
          //Setting order by
@@ -505,12 +515,12 @@ class Builder {
     }
     
     /**
-     * _clear function
+     * clear function
      * 
      * clears all parts of the query as well as query arguments.
      * 
      */
-    private function _clear()
+    public function clear()
     {
         $this->_select = NULL;
         $this->_from = NULL;

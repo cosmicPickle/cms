@@ -102,10 +102,10 @@ class Page {
                 
         if(is_numeric($id))
             //The first parameter is an id
-            $sql->where(array('t1.id' => $id));
+            $sql->where(array($this->page_t.'.id' => $id));
         else
             //We have been given an alias
-            $sql->where(array('t1.alias' => $id));
+            $sql->where(array($this->page_t.'.alias' => $id));
         
         $result = $sql->run()->result();
         
@@ -125,6 +125,9 @@ class Page {
      */
     private function _load_modules($f3, &$page)
     {
+        if(!$page[0]['modules'])
+            return NULL;
+        
         $page[0]['modules'] = $f3->get('dbb')->select('id,bundle,alias')
                                ->from('modules')
                                ->where(array( 'id-in' => json_decode($page[0]['modules'])))
