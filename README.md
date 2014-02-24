@@ -233,3 +233,5 @@ The `page` parameter will be available in your `newsMain.html` file by `bundle_n
     <script src="modules/blog/js/blogServices.js"></script>
     <script src="modules/blog/js/blogDirectives.js"></script>
 ```
+
+You can overwrite the separate values of the dynamic parameters by using the browser's query string. You can pass get parameters of the following type `bundle.alias.param1` (ie. `blog.news.page=2`). These values will be high priority and will overwrite any parameters passed with the module templating. This is done to allow deep linking in the AngularJS app.
