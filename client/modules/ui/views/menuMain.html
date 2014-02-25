@@ -1,0 +1,9 @@
+<div ng-controller="ui.menu.menuCtrl">
+    <ul class='menu'>
+        <li ng-repeat="item in ui.menu.data | orderBy: 'order'">
+            <a ng-href="#/{{item.page}}" alt="{{item.title}}">{{item.title}}</a>
+        </li>
+    </ul>
+</div>
+
+<script src="modules/ui/js/menuControllers.js"></script>

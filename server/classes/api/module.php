@@ -263,13 +263,11 @@ class Module {
                 //we need to see if the current $rel contains mention of our 
                 //data table
                 $rel_column = array_search($data_table, $rel);
-
-                //If rel_column is NULL no match was found
+                //If rel_info is NULL no match was found
                 if($rel_column)
                 {
                     //Fetching data
-                    $rel_data = $f3->get('dbb')->default_select($table, $f3->get('locale'));
-                                   
+                    $rel_data = $f3->get('dbb')->default_select($table, $f3->get('locale'));           
                     //Do we have one or many items in the result?
                     if(count($result) == 1)
                         $rel_data->where(array($table.".".$rel_column => $result[0]['id_']));
@@ -281,16 +279,15 @@ class Module {
                     }
                     
                     $rel_data = $rel_data->run()->result();
-                    
                     //Setting the $table field of the result to rel data
                     foreach($result as $key => &$val)
-                   {
+                    {
                        $filter = array_filter($rel_data, function($v) use ($val, $rel_column){
                             return $v[$rel_column] == $val['id_'];
                        });
                        
                        $val[$table] = $filter;
-                   }
+                    }
                 }
             }
         }

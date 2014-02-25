@@ -37,6 +37,22 @@
                        if(!matches)
                             return true;
                        
+                       /* ---- TODO : Make dynamic parameters work for multiple modules ------
+                       //Otherwise we procede to parse each match
+                       $.each(modTempls, function(i, templ){
+                           var re = new RegExp(pattern);
+                           var matches = re.exec(templ);
+                           
+                           //This constructs the ngInclude directive to add our module to the scope
+                           var replacement = '<div ng-include="\'modules/'
+                                              + mod.bundle + '/views/' + mod.alias 
+                                              + matches[2].charAt(0).toUpperCase() 
+                                              + matches[2].slice(1) + '.html\'"></div>';
+                           
+                           //The actual replacement
+                           page.content = page.content.replace(re, replacement);           
+                       });*/
+                       
                        //This constructs the ngInclude directive to add our module to the scope
                        var replacement = '<div ng-include="\'modules/'
                                          + mod.bundle + '/views/' + mod.alias 

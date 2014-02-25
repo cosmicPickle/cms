@@ -18,4 +18,31 @@
             }
         }
     }]);
+    
+    cmsAppServices.factory('ApiDefHttpService', ['$http', function($http){
+            return {
+                apiUrl : false,
+                init : function(url) {
+                   this.apiUrl = url;
+                   return this;
+                },
+                get : function(id, params) {
+                     if(!this.apiUrl)
+                         return false;
+                     
+                     if(id)
+                         return $http({
+                             url : this.apiUrl + id,
+                             params : params,
+                             method : 'GET'
+                         });
+                     else
+                        return  $http({
+                           url : this.apiUrl,
+                           params : params,
+                           method : 'GET'
+                        });
+                }
+            }
+    }]);
 })()

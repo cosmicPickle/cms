@@ -1,5 +1,5 @@
-angular.module('cmsApp').controllerProvider.register('products.listingCtrl',[
-    '$scope', '$routeParams', 'products.httpService', function($scope, $routeParams, pdsHttpService) {
+angular.module('cmsApp').controllerProvider.register('cart.products.listingCtrl',[
+    '$scope', '$routeParams', 'ApiDefHttpService', function($scope, $routeParams, ApiDefHttpService) {
            
            var data = {
                filter : {
@@ -9,7 +9,7 @@ angular.module('cmsApp').controllerProvider.register('products.listingCtrl',[
                rel_many : 1
            }
            
-           pdsHttpService.getProducts(data).success(function(data){
+           ApiDefHttpService.init('../server/module/cart.products/products/').get(data).success(function(data){
                console.log(data);
            })
     }
