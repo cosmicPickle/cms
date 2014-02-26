@@ -128,7 +128,7 @@ class Page {
         if(!$page[0]['modules'])
             return NULL;
         
-        $page[0]['modules'] = $f3->get('dbb')->select('id,bundle,alias')
+        $page[0]['modules'] = $f3->get('dbb')->select('id,bundle,alias,scripts')
                                ->from('modules')
                                ->where(array( 'id-in' => json_decode($page[0]['modules'])))
                                ->run()->result();

@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/wamp/www/development/work/cms/client/modules/ui/views/menuMain.html</file>
-            <file>file:/E:/wamp/www/development/work/cms/client/modules/main/js/cmsAppDirectives.js</file>
-            <file>file:/E:/wamp/www/development/work/cms/client/modules/main/js/cmsAppServices.js</file>
-            <file>file:/E:/wamp/www/development/work/cms/client/modules/cart/views/productsListing.html</file>
-            <file>file:/E:/wamp/www/development/work/cms/client/modules/ui/js/menuControllers.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/views/menuSkin.html</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/js/menuControllers.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/main/js/cmsAppDirectives.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/views/menuMain.html</file>
         </group>
     </open-files>
 </project-private>
