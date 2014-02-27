@@ -196,30 +196,17 @@ The `foreign_key_column_1` is the name of the column of `table_name_1` that will
 ### Bootstraping the module in AngularJS
 
 Note that you will need a bit of knowledge in how AngularJS works if you are to understand this part of the tutorial.
-So let's get started. We are back to the `newsMain.html` file. We need to add AngularJS markup (don't worry about adding `ngApp` directive, the module will be injected in the main application automatically).
+So let's get started. You need to create your AngularJS module that will handle your backend API calls. Lets call the module `blogNewsModule`. Let's create a file called `blogNewsModule.js` in the `modules/blog/js/` folder. (although it is no different from creating normal Angular Modules, for more tutorials check out their website):
 
-```html
-    <div ng-controller="blog.newsCtrl">
-    </div>
-    
-    <script src="modules/blog/js/blogControllers.js"></script>
-    <script src="modules/blog/js/blogServices.js"></script>
-    <script src="modules/blog/js/blogDirectives.js"></script>
-```
-
-You, ofcourse need to create the files `blogControllers.js`, `blogServices.js"` and `blogDirectives.js`. 
-
-The cms main module is called `cmsApp`. If you look at the main js file of the application `cmsApp.js`, you will see that all providers are made available for later use in the configuration of the module by assigning them to the cmsApp object. This makes it very easy to insert Controllers, Services and Directives to the main module. I will give examples of each bellow.
 
 ```JavaScript
 
-  //blogControllers.js content
-  angular.module('cmsApp').controllerProvider.register('blog.newsCtrl',['$scope', function($scope) {
-      
+  var blogNewsModule = angular.module('blogNewsModule',[]);
+  
+  blogNewsModule.controller('blog.newsCtrl',['$scope', function($scope) {
   }]);
   
-  //blogServices.js content
-  angular.module('cmsApp').provide.service('blog.httpService', ['$http', function($http){
+  blogNewsModule.service('blog.httpService', ['$http', function($http){
       return {
           getNews : function(id, params) {
               
@@ -227,8 +214,7 @@ The cms main module is called `cmsApp`. If you look at the main js file of the a
       }
   }]);
   
-  //blogDirectives.js content
-  angular.module('cmsApp').compileProvider.directive('blog.newsDirective',function(){
+  blogNewsModule.directive('blog.newsDirective',function(){
         return {
             restrict : 'E',
             templateUrl : 'modules/blog/views/newsDirective.html'
@@ -236,7 +222,40 @@ The cms main module is called `cmsApp`. If you look at the main js file of the a
     });
 ```
 
-You will notice that in all examples above the controller, service and directive are namespaced to the `blog` namespace. That is not mandatory but it is highly recommended to avoid code collisions. The module is now an active AngularJs module and you can use all Angular goodies in it as you see fit.
+Next, we want to include `blogNewsModule.js` in our `index.html`;
+
+```html
+   <!-- Modules included here -->
+   <script src="modules/ui/js/menuModule.js"></script>
+   <script src="modules/ui/js/menuControllers.js"></script>
+   <script src="modules/ui/js/menuDirectives.js"></script>
+  
+   <script src="modules/cart/js/productsModule.js"></script>
+   <script src="modules/cart/js/productsControllers.js"></script>
+   <script src="modules/cart/js/productsDirectives.js"></script>
+   
+   <!-- Include blogNewsModule.js here -->
+   <script src="modules/blog/js/blogNewsModule.js"></script>
+```
+
+We also need to add the dependancy in our bootstraping Angular module. Open the file `modules/main/cmsApp.js`. In the array dependancies you need to include your own module.
+
+```javascript
+    //Dependancy configuration
+    var dependancies = ['ngRoute', 'cmsAppControllers', 'uiMenuModule', 'cartProductsModule', 'blogNewsModule'];
+```
+
+
+Finally, we are back to the `newsMain.html` file. We need to add AngularJS markup.
+
+```html
+    <div ng-controller="blog.newsCtrl">
+    </div>
+```
+
+You are good to go!
+
+**NOTE :** This is not intended to be a detailed guide on AngularJS modules. For more information on how they work visit [AngularJS](http://angularjs.org).
 
 **Module parameters**
 
@@ -248,10 +267,6 @@ The `page` parameter will be available in your `newsMain.html` file by `bundle_n
     <div ng-controller="blog.newsCtrl">
       {{blog.news.page}}
     </div>
-    
-    <script src="modules/blog/js/blogControllers.js"></script>
-    <script src="modules/blog/js/blogServices.js"></script>
-    <script src="modules/blog/js/blogDirectives.js"></script>
 ```
 
 You can overwrite the separate values of the dynamic parameters by using the browser's query string. You can pass get parameters of the following type `bundle.alias.param1` (ie. `blog.news.page=2`). These values will be high priority and will overwrite any parameters passed with the module templating. This is done to allow deep linking in the AngularJS app.
