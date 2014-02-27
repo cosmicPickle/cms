@@ -1,0 +1,15 @@
+<div ng-show='cart.products.listing.displayCurrent'>
+    <div ng-click='cart.products.listing.closeCurrent()'>
+        Close[x]
+    </div>
+    {{cart.products.listing.currentProduct.title}}
+    <div class='images'>
+        <img ng-src='../resources/images/products/{{cart.products.listing.currentProduct.imgMain.image}}' style='width:150px;'>
+        <ul>
+            <li ng-repeat='img in cart.products.listing.currentProduct.images'>
+                <img ng-src='../resources/images/products/{{img.image}}' style='width:50px;'>
+            </li>
+        </ul>
+    </div>
+     {{cart.products.listing.currentProduct.description}}
+<div>

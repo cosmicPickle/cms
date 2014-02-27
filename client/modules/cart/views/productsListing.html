@@ -1,3 +1,11 @@
 <div ng-controller="cart.products.listingCtrl">
+    <ul>
+        <li ng-repeat='product in cart.products.listing.items' ng-click='cart.products.listing.showCurrent(product)'>
+            {{product.title}}
+            <img ng-src='../resources/images/products/{{product.imgMain.image}}' style='width:150px;'/>
+        </li>
+    </ul>
     
+    <div product cur-product='{{cart.products.listing.currentProduct}}'>
+    </div>
 </div>

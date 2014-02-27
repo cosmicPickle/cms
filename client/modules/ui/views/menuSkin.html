@@ -1,7 +1,0 @@
-<div ng-controller="ui.menu.menuCtrl" ng-init="init('skin')">
-    <ul class='menu'>
-        <li ng-repeat="item in ui.menu['skin'].data | orderBy: 'order'">
-            <a ng-href="#/{{item.page}}" alt="{{item.title}}">{{item.title}}</a>
-        </li>
-    </ul>
-</div>

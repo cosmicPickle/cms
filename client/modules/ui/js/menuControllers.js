@@ -9,10 +9,16 @@ angular.module('cmsApp').controllerProvider.register('ui.menu.menuCtrl',[
                 }
              }).success(function(resp){
                  if(resp.success)
+                 {    
                     $scope.ui.menu[view].data = resp.data.mdata;
-                else
+                 }
+                 else
                     $rootScope.errors = resp.data;
             });
         }    
+        
+        $scope.reload = function(href) {
+            console.log(href);
+        }
     }
 ]);

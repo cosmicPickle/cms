@@ -200,9 +200,15 @@ class Module {
         $data_table = $f3->get('PARAMS.table');
         
         //Getting the requested entry
-        $result = $f3->get('dbb')->default_select($data_table, $f3->get('locale'))
-                                 ->where(array($data_table.'.id' => $id))->run()->result();
+        $result = $f3->get('dbb')->default_select($data_table, $f3->get('locale'));
+                                
         
+        if(is_numeric($id))
+            $result->where(array($data_table.'.id' => $id));
+        else
+            $result->where(array($data_table.'.alias' => $id));
+        
+        $result = $result->run()->result();   
         if(!$result)
         {
             //If the result is empty no entry was found. Fire an error.

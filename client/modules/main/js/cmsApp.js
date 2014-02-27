@@ -11,6 +11,7 @@
     cmsApp.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'homePage',
         function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, homePage)
         {
+            
             cmsApp.controllerProvider = $controllerProvider;
             cmsApp.compileProvider    = $compileProvider;
             cmsApp.routeProvider      = $routeProvider;

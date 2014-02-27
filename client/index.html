@@ -1,5 +1,5 @@
     <!doctype html>
-    <html lang="en" ng-app="cmsApp" ng-controller="cmsCtrl">
+    <html lang="en" ng-app="cmsApp" ng-controller="cmsCtrl"  id="ng-app">
         
         <head>
             <meta charset="utf-8">
@@ -17,6 +17,13 @@
             <script src="modules/main/js/cmsAppControllers.js"></script>
             <script src="modules/main/js/cmsAppServices.js"></script>
             <script src="modules/main/js/cmsAppDirectives.js"></script>
+            
+            <!--[if lte IE 8]>
+            <script>
+                document.createElement('cms-errors');
+                document.createElement('page');
+            </script>
+            <![endif]-->
         </head>
         <body>
             <div ng-view>

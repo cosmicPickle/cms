@@ -1,7 +1,15 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
+angular.module('cmsApp').compileProvider.directive('product', function(ApiDefHttpService){
+    
+    var link = function(scope, elem, attrs){
+        
+    };
+    
+    return {
+        link : link,
+        restrict : 'AE',
+        scope : true,
+        transclude : true,
+        templateUrl : 'modules/cart/views/productDisplayDirective.html',
+        replace : true
+    }    
+});

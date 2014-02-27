@@ -19,6 +19,7 @@
         }
     }]);
     
+    
     cmsAppServices.factory('ApiDefHttpService', ['$http', function($http){
             return {
                 apiUrl : false,
@@ -32,7 +33,7 @@
                      
                      if(id)
                          return $http({
-                             url : this.apiUrl + id,
+                             url : this.apiUrl + ((this.apiUrl.slice(-1) != '/') ? '/' : '') + id,
                              params : params,
                              method : 'GET'
                          });
