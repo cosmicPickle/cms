@@ -8,16 +8,6 @@
             <title>{{page.title}}</title>
             
             <link rel="stylesheet" type="text/css" href="css/app.css">
-            
-            <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-            <script src="lib/angular/angular.js"></script>
-            <script src="lib/angular/angular-animate.min.js"></script>
-            <script src="lib/angular/angular-route.min.js"></script>
-            <script src="modules/main/js/cmsApp.js"></script>
-            <script src="modules/main/js/cmsAppControllers.js"></script>
-            <script src="modules/main/js/cmsAppServices.js"></script>
-            <script src="modules/main/js/cmsAppDirectives.js"></script>
-            
             <!--[if lte IE 8]>
             <script>
                 document.createElement('cms-errors');
@@ -28,5 +18,24 @@
         <body>
             <div ng-view>
             </div>
+            
+            <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+            <script src="lib/angular/angular.js"></script>
+            <script src="lib/angular/angular-animate.min.js"></script>
+            <script src="lib/angular/angular-route.min.js"></script>
+            <script src="modules/main/js/cmsApp.js"></script>
+            <script src="modules/main/js/cmsAppControllers.js"></script>
+            <script src="modules/main/js/cmsAppServices.js"></script>
+            <script src="modules/main/js/cmsAppDirectives.js"></script>
+            
+            <!-- Modules included here -->
+            <script src="modules/ui/js/menuModule.js"></script>
+            <script src="modules/ui/js/menuControllers.js"></script>
+            <script src="modules/ui/js/menuDirectives.js"></script>
+            
+            <script src="modules/cart/js/productsModule.js"></script>
+            <script src="modules/cart/js/productsControllers.js"></script>
+            <script src="modules/cart/js/productsDirectives.js"></script>
+            
         </body>
     </html>

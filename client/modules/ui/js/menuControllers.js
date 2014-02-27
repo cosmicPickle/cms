@@ -1,4 +1,4 @@
-angular.module('cmsApp').controllerProvider.register('ui.menu.menuCtrl',[
+uiMenuModule.controller('ui.menu.menuCtrl',[
     '$scope', '$rootScope', 'ApiDefHttpService', function($scope, $rootScope, ApiDefHttpService) {
         
         $scope.init = function(view){

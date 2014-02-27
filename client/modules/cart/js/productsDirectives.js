@@ -1,4 +1,4 @@
-angular.module('cmsApp').compileProvider.directive('product', function(ApiDefHttpService){
+cartProductsModule.directive('product', function(ApiDefHttpService){
     
     var link = function(scope, elem, attrs){
         

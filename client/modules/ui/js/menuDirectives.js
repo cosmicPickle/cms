@@ -1,4 +1,4 @@
-angular.module('cmsApp').compileProvider.directive('customMenu',['ApiDefHttpService', function(ApiDefHttpService){
+uiMenuModule.directive('customMenu',['ApiDefHttpService', function(ApiDefHttpService){
         
     var link = function(scope, elem, attrs){
         

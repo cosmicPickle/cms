@@ -78,15 +78,7 @@
                                               + matches[2].slice(1) + '.html\'"></div>';
                            //The actual replacement
                            page.layout = page.layout.replace(re, replacement); 
-                       });
-                       
-                       
-                       //Loading any scripts needed for the execution of the module
-                       $.each($.parseJSON(mod.scripts), function(i,script){
-                           var script = "modules/" + mod.bundle + '/js/' + script;
-                           page.layout += "<script type='text/javascript' src='" + script + "'></script>";  
-                       })
-                      
+                       });            
                     });
                     
                     //Finally replacing the static HTML in the layout

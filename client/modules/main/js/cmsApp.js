@@ -1,6 +1,9 @@
 (function(){
     
-    var cmsApp = angular.module('cmsApp', ['ngRoute', 'cmsAppControllers']);
+    //Dependancy configuration
+    var dependancies = ['ngRoute', 'cmsAppControllers', 'uiMenuModule', 'cartProductsModule'];
+    
+    var cmsApp = angular.module('cmsApp', dependancies);
     
     //Configuration area
     
@@ -8,15 +11,9 @@
     cmsApp.constant('homePage', 'home-page');
     
     //Module configuration
-    cmsApp.config(['$routeProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', 'homePage',
-        function($routeProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, homePage)
+    cmsApp.config(['$routeProvider', 'homePage',
+        function($routeProvider, homePage)
         {
-            
-            cmsApp.controllerProvider = $controllerProvider;
-            cmsApp.compileProvider    = $compileProvider;
-            cmsApp.routeProvider      = $routeProvider;
-            cmsApp.filterProvider     = $filterProvider;
-            cmsApp.provide            = $provide;
             
             $routeProvider.when('/:page', {
                 controller : 'pageCtrl',
