@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 27, 2014 at 04:57 PM
+-- Generation Time: Mar 01, 2014 at 10:19 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `tag` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `messages`
@@ -298,7 +298,9 @@ INSERT INTO `messages` (`id`, `tag`, `type`) VALUES
 (4, 'M_FOUND', 'MSG_ERR'),
 (5, 'T_FOUND', 'MSG_ERR'),
 (6, 'D_FOUND', 'MSG_ERR'),
-(7, 'D_NONE', 'MSG_NOT');
+(7, 'D_NONE', 'MSG_NOT'),
+(8, 'MAIL_OK', 'MSG_OK'),
+(9, 'MAIL_ERR', 'MSG_ERR');
 
 -- --------------------------------------------------------
 
@@ -313,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `messages_lang` (
   `text` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_` (`id_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `messages_lang`
@@ -326,7 +328,9 @@ INSERT INTO `messages_lang` (`id`, `id_`, `locale`, `text`) VALUES
 (4, 4, 'en', 'Module not found.'),
 (5, 5, 'en', 'Table not found.'),
 (6, 6, 'en', 'Entry not found.'),
-(7, 7, 'en', 'There are no entries found.');
+(7, 7, 'en', 'There are no entries found.'),
+(8, 8, 'en', 'The mail was send successfully.'),
+(9, 9, 'en', 'There was an error sending your email. Please try again later.');
 
 -- --------------------------------------------------------
 
@@ -338,18 +342,18 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `bundle` varchar(128) NOT NULL,
   `alias` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `scripts` text NOT NULL,
   `data_tables` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `modules`
 --
 
-INSERT INTO `modules` (`id`, `bundle`, `alias`, `scripts`, `data_tables`) VALUES
-(1, 'cart', 'products', '["productsControllers.js", "productsDirectives.js"]', '["products","categories","images"]'),
-(2, 'ui', 'menu', '["menuControllers.js","menuDirectives.js"]', '["menus","menu_items"]');
+INSERT INTO `modules` (`id`, `bundle`, `alias`, `data_tables`) VALUES
+(1, 'cart', 'products', '["products","categories","images"]'),
+(2, 'ui', 'menu', '["menus","menu_items"]'),
+(3, 'forms', 'contact', '');
 
 -- --------------------------------------------------------
 
@@ -404,7 +408,7 @@ INSERT INTO `pages` (`id`, `alias`, `modules`, `layout`) VALUES
 (5, 'prices', '[2]', '{{menu:main(id=1)}} <content>'),
 (6, 'distributors', '[2]', '{{menu:main(id=1)}} <content>'),
 (7, 'about-us', '[2]', '{{menu:main(id=1)}} <content>'),
-(8, 'contacts', '[2]', '{{menu:main(id=1)}} <content>'),
+(8, 'contacts', '[2,3]', '{{menu:main(id=1)}} {{contact:default}} <content>'),
 (9, 'peelings', '[1,2]', '{{menu:main(id=1)}}{{products:listing(category=2)}}<content>'),
 (10, 'cosmeceutics', '[1,2]', '{{menu:main(id=1)}} <content>'),
 (11, 'lift-in-station-19-in-1', '[2]', '{{menu:main(id=1)}} <content>'),

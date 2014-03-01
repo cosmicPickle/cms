@@ -43,6 +43,14 @@
                            params : params,
                            method : 'GET'
                         });
+                },
+                post : function(data) {
+                    return $http({
+                        method : 'POST',
+                        url : this.apiUrl,
+                        data : $.param(data),
+                        headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
                 }
             }
     }]);

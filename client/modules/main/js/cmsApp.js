@@ -1,7 +1,7 @@
 (function(){
     
     //Dependancy configuration
-    var dependancies = ['ngRoute', 'cmsAppControllers', 'uiMenuModule', 'cartProductsModule'];
+    var dependancies = ['ngRoute', 'cmsAppControllers', 'uiMenuModule', 'cartProductsModule', 'formsContactModule'];
     
     var cmsApp = angular.module('cmsApp', dependancies);
     
