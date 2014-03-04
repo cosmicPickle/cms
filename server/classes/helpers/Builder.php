@@ -69,6 +69,13 @@ class Builder {
     private $_args;
     
     /**
+     * The priority of functions when parsing the arguments
+     * 
+     * @var array
+     */
+    private $_args_priority = array('insert','update','join','where','order');
+    
+    /**
      * 1 indexed array of the arguments that is used in the final execution of 
      * the query.
      * 
@@ -260,6 +267,88 @@ class Builder {
     }
     
     /**
+     * Executes an insert query
+     * 
+     * @param string the table to insert into
+     * @param array the column => value pairs to insert
+     * @return null
+     */
+    public function insert($table, $args)
+    {
+        
+        if(!$args)
+            return NULL;
+        $this->_last_query = "INSERT INTO ".$table;
+        
+        $columns = array();
+        $fields  = array();
+        $this->_add_args($args, __FUNCTION__);
+        $this->_parse_args();
+        
+        foreach($args as $key => $val)
+        {
+            $columns[] = $key;
+            $fields[] = '?';
+        }
+        
+        $columns = ' (' . implode(',', $columns) . ') ';
+        $fields = ' (' . implode(',', $fields) . ') ';
+        
+        $this->_last_query .= $columns . "VALUES" . $fields;
+        $this->_db->exec($this->_last_query, $this->_args_parsed);
+        
+        $this->clear();
+        
+        return TRUE;
+    }
+    
+    /**
+     * This function will execute an update query
+     * 
+     * @param string
+     * @param array
+     * @return null
+     */
+    public function update($table, $args)
+    {
+        if(!$args)
+            return NULL;
+        
+        $this->_last_query = "UPDATE ".$table." SET ";
+        
+        $set = array();
+        foreach ($args as $key => $val)
+            $set[] = $key." = ?";
+        
+        $this->_last_query .= implode(', ', $set);
+        
+        if($this->_where)
+            $this->_last_query .= " ".$this->_where;
+        
+        $this->_add_args($args, __FUNCTION__);
+        $this->_parse_args();
+        
+        $this->_db->exec($this->_last_query, $this->_args_parsed);
+        $this->clear();
+        
+        return TRUE;
+    }
+    
+    public function delete($table)
+    {
+        if(!$this->_where)
+            return NULL;
+        
+        $this->_last_query = "DELETE FROM ".$table." ".$this->_where;
+        $this->_parse_args();
+        
+        $this->_db->exec($this->_last_query, $this->_args_parsed);
+        $this->clear();
+        
+        return TRUE;
+    }
+    
+    /**
      * run function
      * 
      * Parses arguments. Constructs the query and passes it to the underlying 
@@ -375,6 +464,159 @@ class Builder {
     }
     
     /**
+     * This function creates a 'default' insert in the table set as the first 
+     * parameter. By default insert I mean that it filters the data to allowed
+     * fields only and inserts in both the main and language tables. Requires 
+     * alias field in the table. 
+     * 
+     * @param string the name of the table in which is being inserted
+     * @param array the data to be inserted
+     * @param array allowed fields in the main table
+     * @param array allowed fields in the language table
+     * @param string the current locale
+     * @return array the message that the operation got
+     */
+    public function default_insert($table, $data, $allowed, $allowed_lang, $locale)
+    {
+        //If we don't have an alias sent, this is invalid input
+        if(!isset($data['alias']))
+            return array('success' => 0, 'msg' => 'INP_INV');
+        
+        //Does the entry exist?
+        $check = $this->select('id')
+                      ->from($table)
+                      ->where(array('alias' => $data['alias']))
+                      ->run()->result();
+        //Yes? Goodbye.
+        if($check)
+            return array('success' => 0, 'msg' => 'E_EXISTS');
+        
+        //Prepping the data for insertion
+        $ins_data = $this->prep_data($data, $allowed);
+        
+        //Inserting the data in the page table
+        $insert = $this->insert($table, $ins_data);
+
+        if($insert)
+        {
+            //Prepping the language data for insertion
+            $ins_data_lang = array(
+                'locale' => $locale,
+                'id_' => $this->_db->lastInsertId()
+            );
+
+            $ins_data_lang = array_merge($ins_data_lang, $this->prep_data($data, $allowed_lang));
+            
+            //Inserting the data in the page language table
+            $insert = $this->insert($table."_lang", $ins_data_lang);
+        }
+        
+        //There was some error?
+        if(!$insert)
+            return array('success' => 0, 'msg' => 'DB_FAIL');
+        
+        //Everything went better than expected.
+        return array('success' => 1, 'msg' => 'ACT_OK');
+    }
+    
+    /**
+     * This function creates a 'default' update in the table set as the first 
+     * parameter. By default update I mean that it filters the data to allowed
+     * fields only and updates both the main and language tables. Requires 
+     * alias field in the table. 
+     * 
+     * @param string the name of the table in which is being inserted
+     * @param string|int the id or alias of the entry being updated
+     * @param array the data to be inserted
+     * @param array allowed fields in the main table
+     * @param array allowed fields in the language table
+     * @param string the current locale
+     * @return array the message that the operation got
+     */
+    public function default_update($table, $id, $data , $allowed, $allowed_lang, $locale)
+    {
+        //We take the alias from the id parameter if it isn't numeric. Otherwise we need it
+        //through the POST data
+        $data['alias'] = is_numeric($id) ? (isset($data['alias']) ? $data['alias'] : NULL) : $id;
+        if(!$data['alias'])
+            //No alias? Invalid input.
+            return array('success' => 0, 'msg' => 'INP_INV');
+        
+        //Setting the update key
+        $key = 'id';
+        if(!is_numeric($id))
+            $key = 'alias';
+        
+        //Does the page exist?
+        $check = $this->select('id')
+                      ->from($table)
+                      ->where(array($key => $id))
+                      ->run()->result();
+        
+        //No? Sayoonara.
+        if(!$check)
+            return array('success' => 0, 'msg' => 'E_FOUND');
+        
+        //Prepping the data for update
+        $upd_data = $this->prep_data($data, $allowed);
+
+        //Updating the page table
+        $update = $this->where(array($key => $id))
+                       ->update($table, $upd_data);
+        
+        if($update)
+        {
+            //Is there an entry for this locale ?
+            $check_lang = $this->select('*')
+                               ->from($table."_lang")
+                               ->where(array('id_' => $check[0]['id'], 'locale' => $locale))
+                               ->run()->result();
+            
+            //Prepping the language data for insertion
+            $upd_data_lang = $this->prep_data($data, $allowed_lang);
+            
+            //Yes ! There is already an entry for this locale. Updating ...
+            if($check_lang)
+                $update = $this->where(array('id_' => $check[0]['id'], 'locale' => $locale))
+                               ->update($table."_lang", $upd_data_lang);
+            else
+            {
+                //Nop... Inserting a new entry.
+                $upd_data_lang['id_'] = $check[0]['id'];
+                $upd_data_lang['locale'] = $locale;
+                
+                $update = $this->insert($table."_lang", $upd_data_lang);
+            }
+        }
+        
+        //The hell? Something went wrong.
+        if(!$update)
+            return array('success' => 0, 'msg' => 'DB_FAIL');
+        
+        //Nice!
+        return array('success' => 1, 'msg' => 'ACT_OK');
+    }
+    
+    /**
+     * This function takes a data array and a template with allowed columns. The 
+     * function returns an array of the type allowed_column => value.
+     * 
+     * @param array the data to be prepped for insert/update
+     * @param array the columns that are allowed to be modified
+     * @return array
+     */
+    public function prep_data($data, $allowed)
+    {
+        $prepped = array();
+        foreach($allowed as $col)
+            $prepped[$col] = isset($data[$col]) ? (is_array($data[$col]) 
+                                                    ? json_encode($data[$col]) 
+                                                    : $data[$col]) 
+                                                 : '';
+        return $prepped;
+    }
+    
+    /**
      * _add_args function
      * 
      * Adds arguments to the _args class variable grouped by function name.
@@ -398,9 +640,11 @@ class Builder {
      */
     private function _parse_args()
     {
-        foreach($this->_args as $func)
-            foreach($func as $arg)
-                $this->_args_parsed[count($this->_args_parsed) + 1] = $arg;
+ 
+        foreach($this->_args_priority as $func)
+            if(isset($this->_args[$func]))
+                foreach($this->_args[$func] as $arg)
+                    $this->_args_parsed[count($this->_args_parsed) + 1] = $arg;
     }
     
     /**

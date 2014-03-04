@@ -57,4 +57,24 @@ class Utils {
         
         echo $resp;
     }
+    
+    /**
+     * This function takes an array and removes all key-value pairs whose keys
+     * aren't alphanumeric. This is to prevent SQL injection through keys which
+     * are normally column names and are not escaped.
+     * 
+     * @param array the data to sanitize
+     * @return array
+     */
+    public function sanitize($data)
+    {
+        if(!is_array($data))
+            return $data;
+        
+        foreach($data as $key => $val)
+            if(!preg_match('#^[a-zA-Z0-9_\.]*$#',$key))
+                unset($data[$key]);
+            
+        return $data;
+    }
 }

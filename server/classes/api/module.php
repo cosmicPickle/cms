@@ -32,6 +32,20 @@ class Module {
      * @var type 
      */
     private $mod_ch;
+    
+    /**
+     * The columns of the main table that are editable through the API
+     * 
+     * @var type 
+     */
+    private $columns = array("bundle", "alias", "data_tables");
+    
+    /**
+     * The columns of the language table that are editable through the API
+     * @var type 
+     */
+    private $lang_columns = array("title", "description");
+    
     /**
      * get function 
      * 
@@ -91,8 +105,127 @@ class Module {
             $f3->get('utils')->reserrors($f3->get('messages')->clear());
         else
             //Otherwise send the data
-            $f3->get('utils')->respond($result);
-            
+            $f3->get('utils')->respond($result);  
+    }
+    
+    public function post($f3)
+    {
+         if(!$f3->get("PARAMS.id"))
+            //If no module id is specified then we will be inserting a new module
+            $this->_post_settings($f3);
+         else
+         {
+             //Let's get the module's settigns
+             $settings = $this->_get_settings_single($f3);
+             
+             //Ofcourse we have to check if the specified table belongs to the module 
+             if(!in_array($f3->get('PARAMS.table'), json_decode($settings[0]['data_tables'])))
+             {
+                 //If this table does not belong to this module fire a table not found error
+                 $f3->get('messages')->msg('T_FOUND');
+                 $f3->get('utils')->reserrors($f3->get('messages')->clear());
+                 return NULL;
+             }
+             
+             //This will be the class name (including namespace) of the module in question
+             $class = $this->mod_ns . ucfirst($settings[0]['bundle']) . '\\' 
+                      . ucfirst($settings[0]['alias']);
+             
+             if(class_exists($class))
+             {
+                 //If the class exists we will create an instance of it 
+                 //for later use
+                 $this->mod_ch = new $class();
+
+                 //If a method named get exists in the child, it will be 
+                 //used to fetch table data
+                 if(method_exists($class, 'post'))
+                     $result['mdata'] = $this->mod_ch->post($f3);
+             }
+             if(!class_exists($class) || !method_exists($class, 'post'))
+                 //Otherwile we fallback to default
+                 $result['mdata'] = $this->_post_data($f3);
+         }
+    }
+    
+    public function put($f3)
+    {
+        if(!$f3->get("PARAMS.table"))
+            //If no module id is specified then we will be update a module
+            $this->_put_settings($f3);
+         else
+         {
+             //Let's get the module's settigns
+             $settings = $this->_get_settings_single($f3);
+             
+             //Ofcourse we have to check if the specified table belongs to the module 
+             if(!in_array($f3->get('PARAMS.table'), json_decode($settings[0]['data_tables'])))
+             {
+                 //If this table does not belong to this module fire a table not found error
+                 $f3->get('messages')->msg('T_FOUND');
+                 $f3->get('utils')->reserrors($f3->get('messages')->clear());
+                 return NULL;
+             }
+             
+             //This will be the class name (including namespace) of the module in question
+             $class = $this->mod_ns . ucfirst($settings[0]['bundle']) . '\\' 
+                      . ucfirst($settings[0]['alias']);
+             
+             if(class_exists($class))
+             {
+                 //If the class exists we will create an instance of it 
+                 //for later use
+                 $this->mod_ch = new $class();
+
+                 //If a method named get exists in the child, it will be 
+                 //used to fetch table data
+                 if(method_exists($class, 'put'))
+                     $result['mdata'] = $this->mod_ch->put($f3);
+             }
+             if(!class_exists($class) || !method_exists($class, 'put'))
+                 //Otherwile we fallback to default
+                 $result['mdata'] = $this->_put_data($f3);
+         }
+    }
+    
+    public function delete($f3)
+    {
+         if(!$f3->get("PARAMS.table"))
+            //If no module id is specified then we will be delete a module
+            $this->_delete_settings($f3);
+         else
+         {
+             //Let's get the module's settigns
+             $settings = $this->_get_settings_single($f3);
+             
+             //Ofcourse we have to check if the specified table belongs to the module 
+             if(!in_array($f3->get('PARAMS.table'), json_decode($settings[0]['data_tables'])))
+             {
+                 //If this table does not belong to this module fire a table not found error
+                 $f3->get('messages')->msg('T_FOUND');
+                 $f3->get('utils')->reserrors($f3->get('messages')->clear());
+                 return NULL;
+             }
+             
+             //This will be the class name (including namespace) of the module in question
+             $class = $this->mod_ns . ucfirst($settings[0]['bundle']) . '\\' 
+                      . ucfirst($settings[0]['alias']);
+             
+             if(class_exists($class))
+             {
+                 //If the class exists we will create an instance of it 
+                 //for later use
+                 $this->mod_ch = new $class();
+
+                 //If a method named get exists in the child, it will be 
+                 //used to fetch table data
+                 if(method_exists($class, 'delete'))
+                     $result['mdata'] = $this->mod_ch->delete($f3);
+             }
+             if(!class_exists($class) || !method_exists($class, 'delete'))
+                 //Otherwile we fallback to default
+                 $result['mdata'] = $this->_delete_data($f3);
+         }
     }
     
     private function _get_settings_list($f3)
@@ -299,6 +432,171 @@ class Module {
         }
 
         return $result;
+    }
+    
+    private function _post_settings($f3)
+    {
+        $data = $f3->get('POST');
+        $result = $f3->get('dbb')->default_insert($this->mod_t, 
+                                                  $data, $this->columns, 
+                                                  $this->lang_columns, 
+                                                  $f3->get('locale'));
+        
+        
+        $f3->get('messages')->msg($result['msg']);
+        if($result['success'])
+            $f3->get('utils')->respond($f3->get('messages')->clear());
+        else
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+    }
+    
+    private function _post_data($f3)
+    {
+        $data = $f3->get('GET.main');
+        $data_lang = $f3->get('GET.lang');
+        $table = $f3->get('PARAMS.table');
+        
+        if(isset($this->mod_ch->allowed))
+            $data = $f3->get('dbb')->prep_data($data, $this->mod_ch->allowed);
+        else 
+            $data = $f3->get('utils')->sanitize($data);
+        
+        if(isset($this->mod_ch->allowed_lang))
+            $data_lang = $f3->get('dbb')->prep_data($data_lang, $this->mod_ch->allowed_lang);
+        else
+            $data_lang = $f3->get('utils')->sanitize($data_lang);
+        
+        $result = $f3->get('dbb')->insert($table,$data);
+        
+        if($result)
+        {
+            $data_lang['locale'] = $f3->get('locale');
+            $data_lang['id_'] = $f3->get('db')->lastInsertId();
+            $result = $f3->get('dbb')->insert($table."_lang", $data_lang);
+        }
+        
+        if(!$result)
+        {
+            $f3->get('messages')->msg('DB_FAIL');
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+            return NULL;
+        }
+        
+        //TODO: ADD FILE UPLOAD
+        
+        $f3->get('messages')->msg('ACT_OK');
+        $f3->get('utils')->respond($f3->get('messages')->clear());   
+    }
+    
+    private function _put_settings($f3)
+    {
+        $data = $f3->get('POST');
+        $id = $f3->get('PARAMS.id');
+        
+        $result = $f3->get('dbb')->default_update($this->mod_t, $id,
+                                                  $data, $this->columns, 
+                                                  $this->lang_columns, 
+                                                  $f3->get('locale'));
+        
+        
+        $f3->get('messages')->msg($result['msg']);
+        if($result['success'])
+            $f3->get('utils')->respond($f3->get('messages')->clear());
+        else
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+    }
+    
+    private function _put_data($f3)
+    {
+        $data = $f3->get('GET.main');
+        $data_lang = $f3->get('GET.lang');
+        $table = $f3->get('PARAMS.table');
+        $id = $f3->get('PARAMS.d_id');
+        
+        if(isset($this->mod_ch->allowed))
+            $data = $f3->get('dbb')->prep_data($data, $this->mod_ch->allowed);
+        else 
+            $data = $f3->get('utils')->sanitize($data);
+        
+        if(isset($this->mod_ch->allowed_lang))
+            $data_lang = $f3->get('dbb')->prep_data($data_lang, $this->mod_ch->allowed_lang);
+        else
+            $data_lang = $f3->get('utils')->sanitize($data_lang);
+        
+        $result = $f3->get('dbb')->where(array('id' => $id))->update($table,$data);
+        
+        if($result)
+        {
+            $check = $f3->get('dbb')->select('*')
+                                    ->from($table."_lang")
+                                    ->where(array('locale' => $f3->get('locale'), 'id_' => $id))
+                                    ->run()->result();
+            
+            if(!$check)
+                $result = $f3->get('dbb')->insert($table."_lang", $data_lang);
+            else
+            {
+                $data_lang['locale'] = $f3->get('locale');
+                $data_lang['id_'] = $id;
+                $result = $f3->get('dbb')->where(array('locale' => $f3->get('locale'), 'id_' => $id))
+                                         ->update($table."_lang", $data_lang);
+            }
+        }
+        
+        if(!$result)
+        {
+            $f3->get('messages')->msg('DB_FAIL');
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+            return NULL;
+        }
+        
+        //TODO: ADD FILE UPLOAD
+        
+        $f3->get('messages')->msg('ACT_OK');
+        $f3->get('utils')->respond($f3->get('messages')->clear());
+    }
+    
+    private function _delete_settings($f3)
+    {
+        $id = $f3->get('PARAMS.id');
+        
+        $key = 'id';
+        if(!is_numeric($id))
+            $key = 'alias';
+        
+        //Tables set on foreign keys to cascade. No need to delete the language data
+        //separately
+        $delete = $f3->get('dbb')->where(array($key => $id))->delete($this->mod_t);
+        
+        //Huh?
+        if(!$delete)
+        {    
+            $f3->get('messages')->msg('DB_FAIL');
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+            return NULL;
+        }
+        
+        //Ok. You deleted the module. Happy?
+        $f3->get('messages')->msg('ACT_OK');
+        $f3->get('utils')->respond($f3->get('messages')->clear());
+    }
+    
+    private function _delete_data($f3)
+    {
+        $table = $f3->get('PARAMS.table');
+        $id = $f3->get('PARAMS.d_id');
+        
+        $delete = $f3->get('dbb')->where(array('id' => $id))->delete($table);
+ 
+        if(!$delete)
+        {    
+            $f3->get('messages')->msg('DB_FAIL');
+            $f3->get('utils')->reserrors($f3->get('messages')->clear());
+            return NULL;
+        }
+        
+        $f3->get('messages')->msg('ACT_OK');
+        $f3->get('utils')->respond($f3->get('messages')->clear());
     }
 }
 

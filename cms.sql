@@ -2,10 +2,10 @@
 -- version 4.0.4
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Mar 01, 2014 at 10:19 AM
--- Server version: 5.6.12-log
--- PHP Version: 5.4.16
+-- Хост: localhost
+-- Време на генериране: 
+-- Версия на сървъра: 5.6.12-log
+-- Версия на PHP: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `cms`
+-- БД: `cms`
 --
 CREATE DATABASE IF NOT EXISTS `cms` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `cms`;
@@ -25,7 +25,7 @@ USE `cms`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories`
+-- Структура на таблица `categories`
 --
 
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Dumping data for table `categories`
+-- Схема на данните от таблица `categories`
 --
 
 INSERT INTO `categories` (`id`, `alias`) VALUES
@@ -50,7 +50,7 @@ INSERT INTO `categories` (`id`, `alias`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categories_lang`
+-- Структура на таблица `categories_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `categories_lang` (
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `categories_lang` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
--- Dumping data for table `categories_lang`
+-- Схема на данните от таблица `categories_lang`
 --
 
 INSERT INTO `categories_lang` (`id`, `id_`, `locale`, `name`, `created_at`, `updated_at`) VALUES
@@ -80,7 +80,7 @@ INSERT INTO `categories_lang` (`id`, `id_`, `locale`, `name`, `created_at`, `upd
 -- --------------------------------------------------------
 
 --
--- Table structure for table `images`
+-- Структура на таблица `images`
 --
 
 CREATE TABLE IF NOT EXISTS `images` (
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `images` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `images`
+-- Схема на данните от таблица `images`
 --
 
 INSERT INTO `images` (`id`, `product_id`, `image`, `main`) VALUES
@@ -103,7 +103,7 @@ INSERT INTO `images` (`id`, `product_id`, `image`, `main`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `images_lang`
+-- Структура на таблица `images_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `images_lang` (
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `images_lang` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menus`
+-- Структура на таблица `menus`
 --
 
 CREATE TABLE IF NOT EXISTS `menus` (
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `menus`
+-- Схема на данните от таблица `menus`
 --
 
 INSERT INTO `menus` (`id`, `alias`) VALUES
@@ -145,7 +145,7 @@ INSERT INTO `menus` (`id`, `alias`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menus_lang`
+-- Структура на таблица `menus_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `menus_lang` (
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `menus_lang` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `menus_lang`
+-- Схема на данните от таблица `menus_lang`
 --
 
 INSERT INTO `menus_lang` (`id`, `id_`, `locale`, `title`, `created_at`, `updated_at`) VALUES
@@ -174,7 +174,7 @@ INSERT INTO `menus_lang` (`id`, `id_`, `locale`, `title`, `created_at`, `updated
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menu_items`
+-- Структура на таблица `menu_items`
 --
 
 CREATE TABLE IF NOT EXISTS `menu_items` (
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `menu_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=36 ;
 
 --
--- Dumping data for table `menu_items`
+-- Схема на данните от таблица `menu_items`
 --
 
 INSERT INTO `menu_items` (`id`, `mid`, `page`, `order`) VALUES
@@ -225,7 +225,7 @@ INSERT INTO `menu_items` (`id`, `mid`, `page`, `order`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `menu_items_lang`
+-- Структура на таблица `menu_items_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `menu_items_lang` (
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `menu_items_lang` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=31 ;
 
 --
--- Dumping data for table `menu_items_lang`
+-- Схема на данните от таблица `menu_items_lang`
 --
 
 INSERT INTO `menu_items_lang` (`id`, `id_`, `locale`, `title`, `created_at`, `updated_at`) VALUES
@@ -277,7 +277,7 @@ INSERT INTO `menu_items_lang` (`id`, `id_`, `locale`, `title`, `created_at`, `up
 -- --------------------------------------------------------
 
 --
--- Table structure for table `messages`
+-- Структура на таблица `messages`
 --
 
 CREATE TABLE IF NOT EXISTS `messages` (
@@ -285,10 +285,10 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `tag` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(16) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `messages`
+-- Схема на данните от таблица `messages`
 --
 
 INSERT INTO `messages` (`id`, `tag`, `type`) VALUES
@@ -300,12 +300,19 @@ INSERT INTO `messages` (`id`, `tag`, `type`) VALUES
 (6, 'D_FOUND', 'MSG_ERR'),
 (7, 'D_NONE', 'MSG_NOT'),
 (8, 'MAIL_OK', 'MSG_OK'),
-(9, 'MAIL_ERR', 'MSG_ERR');
+(9, 'MAIL_ERR', 'MSG_ERR'),
+(10, 'E_EXISTS', 'MSG_ERR'),
+(11, 'DB_FAIL', 'MSG_ERR'),
+(12, 'INP_INV', 'MSG_ERR'),
+(13, 'ACT_OK', 'MSG_OK'),
+(14, 'E_FOUND', 'MSG_ERR'),
+(15, 'AUTH_FAIL', 'MSG_ERR'),
+(16, 'AUTH_INV', 'MSG_ERR');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `messages_lang`
+-- Структура на таблица `messages_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `messages_lang` (
@@ -315,10 +322,10 @@ CREATE TABLE IF NOT EXISTS `messages_lang` (
   `text` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_` (`id_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `messages_lang`
+-- Схема на данните от таблица `messages_lang`
 --
 
 INSERT INTO `messages_lang` (`id`, `id_`, `locale`, `text`) VALUES
@@ -330,12 +337,19 @@ INSERT INTO `messages_lang` (`id`, `id_`, `locale`, `text`) VALUES
 (6, 6, 'en', 'Entry not found.'),
 (7, 7, 'en', 'There are no entries found.'),
 (8, 8, 'en', 'The mail was send successfully.'),
-(9, 9, 'en', 'There was an error sending your email. Please try again later.');
+(9, 9, 'en', 'There was an error sending your email. Please try again later.'),
+(10, 10, 'en', 'The entry already exists.'),
+(11, 11, 'en', 'There was an error processing your request.'),
+(12, 12, 'en', 'Invalid input.'),
+(13, 13, 'en', 'Action successful.'),
+(14, 14, 'en', 'Entry does not exist.'),
+(15, 15, 'en', 'You are not authorised to perform that action.'),
+(16, 16, 'en', 'Invalid username or password have been provided.');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `modules`
+-- Структура на таблица `modules`
 --
 
 CREATE TABLE IF NOT EXISTS `modules` (
@@ -344,10 +358,10 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `alias` varchar(128) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `data_tables` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
--- Dumping data for table `modules`
+-- Схема на данните от таблица `modules`
 --
 
 INSERT INTO `modules` (`id`, `bundle`, `alias`, `data_tables`) VALUES
@@ -358,7 +372,7 @@ INSERT INTO `modules` (`id`, `bundle`, `alias`, `data_tables`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `modules_lang`
+-- Структура на таблица `modules_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `modules_lang` (
@@ -371,10 +385,10 @@ CREATE TABLE IF NOT EXISTS `modules_lang` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `id_` (`id_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `modules_lang`
+-- Схема на данните от таблица `modules_lang`
 --
 
 INSERT INTO `modules_lang` (`id`, `id_`, `locale`, `title`, `description`, `created_at`, `updated_at`) VALUES
@@ -384,7 +398,7 @@ INSERT INTO `modules_lang` (`id`, `id_`, `locale`, `title`, `description`, `crea
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages`
+-- Структура на таблица `pages`
 --
 
 CREATE TABLE IF NOT EXISTS `pages` (
@@ -394,10 +408,10 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `layout` text COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `alias` (`alias`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=30 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=51 ;
 
 --
--- Dumping data for table `pages`
+-- Схема на данните от таблица `pages`
 --
 
 INSERT INTO `pages` (`id`, `alias`, `modules`, `layout`) VALUES
@@ -429,12 +443,13 @@ INSERT INTO `pages` (`id`, `alias`, `modules`, `layout`) VALUES
 (26, 'light-in-workstation', '[2]', '{{menu:main(id=1)}} <content>'),
 (27, 'light-in-co2-frax', '[2]', '{{menu:main(id=1)}} <content>'),
 (28, 'light-in-diode', '[2]', '{{menu:main(id=1)}} <content>'),
-(29, 'light-in-pdt', '[2]', '{{menu:main(id=1)}} <content>');
+(29, 'light-in-pdt', '[2]', '{{menu:main(id=1)}} <content>'),
+(50, 'new-page2', '["31","2"]', '{{menu:main(id=1)}}<content>');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pages_lang`
+-- Структура на таблица `pages_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `pages_lang` (
@@ -449,10 +464,10 @@ CREATE TABLE IF NOT EXISTS `pages_lang` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `pages_id` (`id_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=46 ;
 
 --
--- Dumping data for table `pages_lang`
+-- Схема на данните от таблица `pages_lang`
 --
 
 INSERT INTO `pages_lang` (`id`, `id_`, `locale`, `title`, `keywords`, `description`, `content`, `created_at`, `updated_at`) VALUES
@@ -484,12 +499,13 @@ INSERT INTO `pages_lang` (`id`, `id_`, `locale`, `title`, `keywords`, `descripti
 (31, 26, 'en', 'LIGHT''in Workstation ™', 'TODO', 'TODO', '', '2014-02-26 14:33:50', '2014-02-27 09:41:33'),
 (32, 27, 'en', 'LIGHT''in CO2 Frax ™', 'TODO', 'TODO', '', '2014-02-26 14:33:50', '2014-02-27 09:41:33'),
 (33, 28, 'en', 'LIGHT''in Diode ™', 'TODO', 'TODO', '', '2014-02-26 14:33:50', '2014-02-27 09:41:33'),
-(34, 29, 'en', 'LIGHT''in PDT ™', 'TODO', 'TODO', '', '2014-02-26 14:33:50', '2014-02-27 09:41:33');
+(34, 29, 'en', 'LIGHT''in PDT ™', 'TODO', 'TODO', '', '2014-02-26 14:33:50', '2014-02-27 09:41:33'),
+(45, 50, 'en', 'New Title2232222', '', '', '', '2014-03-03 00:11:29', '2014-03-03 00:29:08');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products`
+-- Структура на таблица `products`
 --
 
 CREATE TABLE IF NOT EXISTS `products` (
@@ -498,19 +514,19 @@ CREATE TABLE IF NOT EXISTS `products` (
   `video` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `products`
+-- Схема на данните от таблица `products`
 --
 
 INSERT INTO `products` (`id`, `category_id`, `video`) VALUES
-(3, 2, 'http://www.youtube.com/watch?v=8pw4UCk7YAk');
+(3, 2, 'https://www.youtube.com/watch?v=tZamjrXCDvo');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `products_lang`
+-- Структура на таблица `products_lang`
 --
 
 CREATE TABLE IF NOT EXISTS `products_lang` (
@@ -523,82 +539,104 @@ CREATE TABLE IF NOT EXISTS `products_lang` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `id_` (`id_`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `products_lang`
+-- Схема на данните от таблица `products_lang`
 --
 
 INSERT INTO `products_lang` (`id`, `id_`, `locale`, `title`, `description`, `created_at`, `updated_at`) VALUES
 (3, 3, 'en', 'Aging peel', 'PROPERTIES\r\nAging peel is a chemoexfoliant combining pyruvic and lactic acid in a gellified hydroalcoholic solution at pH‹1.0. After the application of Aging peel the skin increases in luminosity, softness and brilliance.\r\nPyruvic acid is an alpha-keto acid with keratolytic, antimicrobial and sebostatic characteristics. Its high acidity and small molecular size enable it easily penetrate the skin particularly lipophilic areas.\r\nLactic acid is a keratolytic which causes thickening of epidermis and dermis thereby increasing hyaluronic acid concentration in the extracellular matrix, thus giving the skin firmness and hydration.\r\nINDICATIONS \r\nIndicated for the treatment of skins with aging signs like fine and deep wrinkles or hyperpigmentations. It is also useful for treating acne, actinic and fine seborrheic keratosis. Aging peel is recommended for Fitzpatrick phototypes I to IV. The professional shall assess the suitability of application on patients with phototypes V and VI.\r\nHOW TO USE\r\nOn celan dry skin, apply degreasing solution to eliminate the acid mantle. RAHAL Skincare® Pre-peel Degreasing solution is recommended. Protect eyes wit gauze soaked in water prior to applying Aging peel. Contact lens users should remove lenses prior to treatment. \r\nPour 2,5ml into the dose cup and gently apply the peeling with a cotton ball over the area of skin to be treated, distributing it homogenously. Recommended application time of Aging peel is 3 minutes maximum. Under no circumstance should treatment be prolonged should patient start suffering from a generalised intense itching or severe discomfort. Aging peel may also be applied to the body with 3 minutes maximum exposure, except the neck which is 2 minutes.\r\nOnce time is up, wash skin with abundant water and apply DR. RAHAL Skincare® neutralising solution Post peel Solution. Spray treated area generously; leave to act for a few minutes then wash area with saline solution or cold water. \r\n48 hours after treatment, the patient may wash the area with a mild syndet. Daily application of high SPF photoprotectors against UVA and UVB radiation is compulsory 48 hours after the peeling session and for at least six months after treatment completion. RAHAL Skincare® Dermatological Sunscreen SPF50 is particularly indicated for this function.\r\nAfter the peeling, the application of dermocesmetics like DR. RAHAL Skincare® Post procedure Skin Repair, which smoothes and regenerates the skin is essential to favour re-epithelialisation and hydration.\r\nTREATMENT CYCLE: Application protocol is a cycle of six successive applications with a 2 week rest period depending on individual’s skin type and characteristics. An annual application recommended as maintenance.\r\n', '2014-02-27 12:56:19', '2014-02-27 12:56:19');
 
+-- --------------------------------------------------------
+
 --
--- Constraints for dumped tables
+-- Структура на таблица `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `level` int(2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Схема на данните от таблица `users`
+--
+
+INSERT INTO `users` (`id`, `user`, `password`, `email`, `level`) VALUES
+(1, 'tedobg', 'a33236a2c0325e708ef719ed176d93c7', 'teodorklissarov@gmail.com', 10);
+
+--
+-- Ограничения за дъмпнати таблици
 --
 
 --
--- Constraints for table `categories_lang`
+-- Ограничения за таблица `categories_lang`
 --
 ALTER TABLE `categories_lang`
   ADD CONSTRAINT `categories_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `categories_lang` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `images`
+-- Ограничения за таблица `images`
 --
 ALTER TABLE `images`
   ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `images_lang`
+-- Ограничения за таблица `images_lang`
 --
 ALTER TABLE `images_lang`
   ADD CONSTRAINT `images_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `images` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `menus_lang`
+-- Ограничения за таблица `menus_lang`
 --
 ALTER TABLE `menus_lang`
   ADD CONSTRAINT `menus_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `menu_items`
+-- Ограничения за таблица `menu_items`
 --
 ALTER TABLE `menu_items`
   ADD CONSTRAINT `menu_items_ibfk_2` FOREIGN KEY (`page`) REFERENCES `pages` (`alias`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `menu_items_ibfk_3` FOREIGN KEY (`mid`) REFERENCES `menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `menu_items_lang`
+-- Ограничения за таблица `menu_items_lang`
 --
 ALTER TABLE `menu_items_lang`
   ADD CONSTRAINT `menu_items_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `messages_lang`
+-- Ограничения за таблица `messages_lang`
 --
 ALTER TABLE `messages_lang`
   ADD CONSTRAINT `messages_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `modules_lang`
+-- Ограничения за таблица `modules_lang`
 --
 ALTER TABLE `modules_lang`
   ADD CONSTRAINT `modules_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `modules` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `pages_lang`
+-- Ограничения за таблица `pages_lang`
 --
 ALTER TABLE `pages_lang`
   ADD CONSTRAINT `pages_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `products`
+-- Ограничения за таблица `products`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `products_lang`
+-- Ограничения за таблица `products_lang`
 --
 ALTER TABLE `products_lang`
   ADD CONSTRAINT `products_lang_ibfk_1` FOREIGN KEY (`id_`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

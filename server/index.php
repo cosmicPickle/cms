@@ -13,6 +13,8 @@ if($locale = $f3->get("SESSION.locale"))
 //Loading helpers
 $f3->set('messages', new Helpers\Messages($f3));
 $f3->set('utils', new Helpers\Utils($f3));
+$f3->set('auth', new Helpers\Auth($f3));
+
 
 //Loading database driver
 $f3->set('db', new DB\SQL(
@@ -26,6 +28,6 @@ $f3->set('dbb', new Helpers\Builder($f3->get('db')));
 
 
 //Setting the content type to application/json for prety printing
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
 $f3->run();
