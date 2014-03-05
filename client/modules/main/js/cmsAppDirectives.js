@@ -72,7 +72,7 @@
                             }
                             
                             //This constructs the ngInclude directive to add our module to the scope
-                            var replacement = '<div ng-include="\'modules/'
+                            var replacement = '<div class="' + mod.bundle + '-' + mod.alias + '-' + matches[2] + '-root" ng-include="\'modules/'
                                               + mod.bundle + '/views/' + mod.alias 
                                               + matches[2].charAt(0).toUpperCase() 
                                               + matches[2].slice(1) + '.html\'"></div>';

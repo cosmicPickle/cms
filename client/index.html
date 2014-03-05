@@ -2,12 +2,24 @@
     <html lang="en" ng-app="cmsApp" ng-controller="cmsCtrl"  id="ng-app">
         
         <head>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta charset="utf-8">
             <meta name="description" content="{{page.description}}">
             <meta name="keywords" content="{{page.keywords}}">
             <title>{{page.title}}</title>
             
+            <link href='http://fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+            <link href="css/styles.css" rel="stylesheet">
+            
             <link rel="stylesheet" type="text/css" href="css/app.css">
+            
+            <!--[if lt IE 9]>
+                <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+                <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+            
             <!--[if lte IE 8]>
             <script>
                 document.createElement('cms-errors');
@@ -16,8 +28,67 @@
             <![endif]-->
         </head>
         <body>
-            <div ng-view>
+            <div class="container-fluid">
+                <div class="row topline"></div>
+                
+                <div class="row main">
+                    
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 wrap">
+                        
+                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header">
+                             
+                            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-6 banner">
+                                <div class="clearfix visible-xs"></div>
+                            </div><!--end banner-->
+		 
+                            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-6 logo">
+
+                                <div class="btn-group lang">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                      Language
+                                      <span class="caret"></span>
+                                    </button>
+
+                                    <ul class="dropdown-menu">
+                                      <li><a href="#">English</a></li>
+                                      <li><a href="#">German</a></li>
+                                    </ul>
+                                </div> <!--end lang-->
+                            </div><!--end logo-->
+                        </div>
+                        
+                        <div ng-view>
+                        </div>
+
+                    </div>
+                    
+                    <div class="col-xs-12 col-md-12 col-lg-12 footer">
+                        
+                        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 box">
+                            <a href="#"><img src="images/logofooter.png" /></a>
+			</div><!--end box-->
+                        
+			<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 box">
+                            <a href="#"><img src="images/catalogue.png" /></a>
+			</div><!--end box-->
+                        
+			<div class="col-xs-12 col-sm-1 col-md-3 col-lg-3 box">	 
+                            <a href="#"><img src="images/facebook.png" /></a>
+                            <a href="#"><img src="images/twitter.png" /></a>
+                        </div><!--end box-->
+                        
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 box last">
+                            <a href="#"><img src="images/newsletter.png" /></a>
+                            <a href="#"><img src="images/phone.png" /></a>
+                            <a href="#"><img src="images/mobile.png" /></a>
+                            <a href="#"><img src="images/mails.png" /></a>
+			</div><!--end box-->
+                        
+                     </div><!--end footer-->
+                </div>
             </div>
+            
+           
             
             <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
             <script src="lib/angular/angular.js"></script>
@@ -38,6 +109,9 @@
             <script src="modules/cart/js/productsDirectives.js"></script>
             
             <script src="modules/forms/js/contactModule.js"></script>
+            
+            <!-- Loading bootstrap -->
+            <script src="lib/bootstrap/bootstrap.min.js"></script>
             
         </body>
     </html>

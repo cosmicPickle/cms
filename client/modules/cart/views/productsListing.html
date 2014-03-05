@@ -1,11 +1,23 @@
 <div ng-controller="cart.products.listingCtrl">
-    <ul>
-        <li ng-repeat='product in cart.products.listing.items' ng-click='cart.products.listing.showCurrent(product)'>
-            {{product.title}}
-            <img ng-src='../resources/images/products/{{product.imgMain.image}}' style='width:150px;'/>
-        </li>
-    </ul>
-    
-    <div product cur-product='{{cart.products.listing.currentProduct}}'>
+    <div class="col-xs-12 col-sm-6 col-md-8 col-lg-8 topheading">
+        <h2>{{page.title}}</h2>
+    </div><!--end heading-->
+
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 toplogo">
+        <img ng-src="images/{{cart.products.listing.header}}.png" />
     </div>
+
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 view">
+        <ul class="products">	
+            <li ng-repeat='product in cart.products.listing.items' ng-click='cart.products.listing.showCurrent(product)'>
+                <a><p>{{product.title}}</p>
+                    <img ng-src='../resources/images/products/{{product.imgMain.image}}' style='width:180px;'/>
+                </a>
+            </li>
+        </ul><!--end products-->
+    </div><!--end view-->
+</div>		
+
+<div product cur-product='{{cart.products.listing.currentProduct}}'>
 </div>

@@ -1,7 +1,14 @@
-<div>
-    <ul>
-        <li ng-repeat="item in menu.items | orderBy: 'order'">
-            <a ng-href="#/{{item.page}}" alt="{{item.title}}">{{item.title}}</a>
-        </li>
-    </ul>
-</div>
+<ul class="level1 opacity-down {{menu.alias[0]}} {{menu.alias[1]}}">
+    <li><a ng-href="#/products" style="text-transform: capitalize" 
+           ng-mouseover="showSub()" 
+           ng-mouseleave="removeSub()"><span>{{menu.alias[0]}}</span>{{menu.alias[1]}}</a></li>
+    
+    <li>
+	<ul class="level2" style="display:none" ng-mouseover="showSub()" ng-mouseleave="removeSub()">
+            <li class="first" ><img ng-src="images/{{menu.alias[0]}}.png" /></li>
+            <li ng-repeat="item in menu.menu_items | orderBy: 'order'">
+                <a ng-href="#/{{item.page}}" alt="{{item.title}}">{{item.title}}</a>
+            </li>
+	</ul><!--end level2-->
+    </li>
+</ul>

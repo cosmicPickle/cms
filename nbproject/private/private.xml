@@ -3,11 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/wamp/www/dev/cms/server/classes/api/page.php</file>
-            <file>file:/D:/wamp/www/dev/cms/server/index.php</file>
-            <file>file:/D:/wamp/www/dev/cms/server/classes/api/module.php</file>
-            <file>file:/D:/wamp/www/dev/cms/server/classes/helpers/Builder.php</file>
-            <file>file:/D:/wamp/www/dev/cms/server/config.ini</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/js/menuModule.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/cart/js/productsModule.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/css/app.css</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/js/menuDirectives.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/index.html</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/views/menuCustomDirective.html</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/main/js/cmsAppDirectives.js</file>
+            <file>file:/D:/wamp/www/dev/cms/client/modules/ui/views/menuCustom.html</file>
         </group>
     </open-files>
 </project-private>
